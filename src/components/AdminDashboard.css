@@ -1,0 +1,112 @@
+/* AdminDashboard specific styles */
+
+/* Container for Companies title and add button */
+.admin-dashboard-header {
+  padding: 20px;
+}
+.admin-companies-title {
+  color: #111827;
+  margin-bottom: 8px;
+}
+
+/* Company card base style */
+.company-card {
+  cursor: pointer;
+  position: relative;
+}
+.company-card-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+}
+
+/* View feedback button inside company card */
+.view-feedback-button {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+}
+
+/* Back to Companies button container */
+.back-button-container {
+  margin-top: 12px;
+  text-align: left;
+}
+.back-button {
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+/* Companies grid spacing */
+.companies-grid {
+  margin-top: 12px;
+}
+/* Shrink Add Company button */
+.add-company-button {
+  padding: 4px 8px;
+  font-size: 12px;
+  border-radius: 6px;
+}
+
+/* Highlight companies with HR feedback */
+.has-feedback {
+  border: 2px solid #10B981 !important; /* green border */
+}
+
+/* Modal styles */
+.modal-card {
+  background: #fff;
+  padding: 24px;
+  border-radius: 8px;
+  max-width: 600px;
+  width: 100%;
+}
+.modal-title {
+  margin-bottom: 16px;
+  color: #111827;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+.feedback-container {
+  margin-bottom: 16px;
+}
+.feedback-question {
+  color: #1f2937;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+.feedback-answer {
+  color: #4b5563;
+  margin-bottom: 8px;
+}
+.action-row {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+/* Mobile responsive styles - Stack buttons vertically on mobile */
+@media (max-width: 768px) {
+  .admin-dashboard-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 12px;
+  }
+
+  .admin-dashboard-header > div {
+    width: 100%;
+  }
+
+  .admin-dashboard-header > div > div {
+    flex-direction: column !important;
+    width: 100%;
+    gap: 8px !important;
+  }
+
+  .admin-dashboard-header button {
+    width: 100% !important;
+  }
+}
