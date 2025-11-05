@@ -43,7 +43,7 @@ jobs:
       - name: Copy Build Files to Bastion
         run: |
           sshpass -p 'forteai@123' ssh -o StrictHostKeyChecking=no ec2-user@13.204.190.46 "mkdir -p /tmp/frontend-dist && rm -rf /tmp/frontend-dist/*"
-          sshpass -p 'forteai@123' scp -o StrictHostKeyChecking=no -r client/dist/* ec2-user@13.204.190.46:/tmp/frontend-dist/
+          sshpass -p 'forteai@123' scp -o StrictHostKeyChecking=no -r dist/* ec2-user@13.204.190.46:/tmp/frontend-dist/
 
       - name: Verify Files on Bastion
         run: |
