@@ -1,0 +1,62 @@
+name: Frontend Deployment Pipeline
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install Dependencies
+        run: |
+         npm install
+
+      - name: Build Frontend
+        run: |
+         npm run build
+
+      - name: Verify Build Output
+        run: |
+          if [ ! -d "dist" ]; then
+            echo "Build folder not found!"
+            exit 1
+          fi
+          ls -la dist
+
+      - name: Install sshpass
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y sshpass
+
+      - name: Copy Build Files to Bastion
+        run: |
+          sshpass -p 'forteai@123' ssh -o StrictHostKeyChecking=no ec2-user@13.204.190.46 "mkdir -p /tmp/frontend-dist && rm -rf /tmp/frontend-dist/*"
+          sshpass -p 'forteai@123' scp -o StrictHostKeyChecking=no -r client/dist/* ec2-user@13.204.190.46:/tmp/frontend-dist/
+
+      - name: Verify Files on Bastion
+        run: |
+          sshpass -p 'forteai@123' ssh -o StrictHostKeyChecking=no ec2-user@13.204.190.46 "ls -la /tmp/frontend-dist"
+
+      - name: Copy Files to Frontend Server
+        run: |
+          sshpass -p 'forteai@123' ssh -o StrictHostKeyChecking=no ec2-user@13.204.190.46 \
+            "sshpass -p 'forteai@1234' ssh -o StrictHostKeyChecking=no ec2-user@10.0.143.197 'sudo mkdir -p /usr/share/nginx/html && sudo chown ec2-user:ec2-user /usr/share/nginx/html -R'"
+          sshpass -p 'forteai@123' ssh -o StrictHostKeyChecking=no ec2-user@13.204.190.46 \
+            "sshpass -p 'forteai@1234' scp -o StrictHostKeyChecking=no -r /tmp/frontend-dist/* ec2-user@10.0.143.197:/usr/share/nginx/html/"
+
+      - name: Restart Nginx
+        run: |
+          sshpass -p 'forteai@123' ssh -o StrictHostKeyChecking=no ec2-user@13.204.190.46 \
+            "sshpass -p 'forteai@1234' ssh -o StrictHostKeyChecking=no ec2-user@10.0.143.197 'sudo systemctl restart nginx'"
