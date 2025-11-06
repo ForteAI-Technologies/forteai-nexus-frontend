@@ -1,69 +1,121 @@
 name: Frontend Deployment Pipeline
-
+ 
 on:
+
   workflow_dispatch:
+
   push:
+
     branches:
+
       - main
-
+ 
 jobs:
-  deploy:
-    runs-on: ubuntu-latest
 
+  deploy:
+
+    runs-on: ubuntu-latest
+ 
     steps:
+
+      # 1️⃣ Checkout Code
+
       - name: Checkout Repository
+
         uses: actions/checkout@v3
+ 
+      # 2️⃣ Setup Node.js
 
       - name: Setup Node.js
+
         uses: actions/setup-node@v3
+
         with:
+
           node-version: '18'
-          
-      # 🆕 NEW STEP — Set environment variables before build
-      - name: Create .env file for production
-        run: |
-          echo "VITE_API_BASE_URL=https://nexus-backend.forteai.in/api" >> .env
-          echo "VITE_BACKEND_URL=https://nexus-backend.forteai.in" >> .env
-          cat .env   # just to verify in logs
+ 
+      # 3️⃣ Clean any previous build & rebuild fresh
 
-      - name: Install Dependencies
-        run: |
-         npm install
+      - name: Clean and Build Frontend
 
-      - name: Build Frontend
         run: |
-         npm run build
 
-      - name: Verify Build Output
-        run: |
-          if [ ! -d "dist" ]; then
-            echo "Build folder not found!"
-            exit 1
-          fi
+          rm -rf dist
+
+          npm install
+
+          npm run build
+
+          echo "✅ Build completed. Files in dist/:"
+
           ls -la dist
+ 
+      # 4️⃣ Install sshpass
 
       - name: Install sshpass
+
         run: |
+
           sudo apt-get update
+
           sudo apt-get install -y sshpass
+ 
+      # 5️⃣ Copy build files to Bastion
 
       - name: Copy Build Files to Bastion
+
         run: |
-          sshpass -p 'forteai@123' ssh -o StrictHostKeyChecking=no ec2-user@13.204.190.46 "mkdir -p /tmp/frontend-dist && rm -rf /tmp/frontend-dist/*"
+
+          echo "📦 Sending build to Bastion..."
+
+          sshpass -p 'forteai@123' ssh -o StrictHostKeyChecking=no ec2-user@13.204.190.46 "rm -rf /tmp/frontend-dist && mkdir -p /tmp/frontend-dist"
+
           sshpass -p 'forteai@123' scp -o StrictHostKeyChecking=no -r dist/* ec2-user@13.204.190.46:/tmp/frontend-dist/
 
-      - name: Verify Files on Bastion
-        run: |
           sshpass -p 'forteai@123' ssh -o StrictHostKeyChecking=no ec2-user@13.204.190.46 "ls -la /tmp/frontend-dist"
+ 
+      # 6️⃣ Replace old Nginx build with new one
 
       - name: Copy Files to Frontend Server
-        run: |
-          sshpass -p 'forteai@123' ssh -o StrictHostKeyChecking=no ec2-user@13.204.190.46 \
-            "sshpass -p 'forteai@1234' ssh -o StrictHostKeyChecking=no ec2-user@10.0.143.197 'sudo mkdir -p /usr/share/nginx/html && sudo chown ec2-user:ec2-user /usr/share/nginx/html -R'"
-          sshpass -p 'forteai@123' ssh -o StrictHostKeyChecking=no ec2-user@13.204.190.46 \
-            "sshpass -p 'forteai@1234' scp -o StrictHostKeyChecking=no -r /tmp/frontend-dist/* ec2-user@10.0.143.197:/usr/share/nginx/html/"
 
-      - name: Restart Nginx
         run: |
-          sshpass -p 'forteai@123' ssh -o StrictHostKeyChecking=no ec2-user@13.204.190.46 \
-            "sshpass -p 'forteai@1234' ssh -o StrictHostKeyChecking=no ec2-user@10.0.143.197 'sudo systemctl restart nginx'"
+
+          echo "🚀 Copying new build to Frontend EC2..."
+
+          sshpass -p 'forteai@123' ssh -o StrictHostKeyChecking=no ec2-user@13.204.190.46 "
+
+            sshpass -p 'forteai@1234' ssh -o StrictHostKeyChecking=no ec2-user@10.0.143.197 '
+
+              sudo rm -rf /usr/share/nginx/html/* &&
+
+              sudo mkdir -p /usr/share/nginx/html &&
+
+              sudo chown ec2-user:ec2-user /usr/share/nginx/html -R'
+
+          "
+
+          sshpass -p 'forteai@123' ssh -o StrictHostKeyChecking=no ec2-user@13.204.190.46 "
+
+            sshpass -p 'forteai@1234' scp -o StrictHostKeyChecking=no -r /tmp/frontend-dist/* ec2-user@10.0.143.197:/usr/share/nginx/html/
+
+          "
+ 
+      # 7️⃣ Restart Nginx to apply changes
+
+      - name: Restart Nginx on Frontend Server
+
+        run: |
+
+          sshpass -p 'forteai@123' ssh -o StrictHostKeyChecking=no ec2-user@13.204.190.46 "
+
+            sshpass -p 'forteai@1234' ssh -o StrictHostKeyChecking=no ec2-user@10.0.143.197 '
+
+              sudo systemctl restart nginx &&
+
+              echo \"✅ Nginx restarted successfully!\"
+
+            '
+
+          "
+
+ 
