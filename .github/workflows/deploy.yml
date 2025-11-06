@@ -18,6 +18,13 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '18'
+          
+      # 🆕 NEW STEP — Set environment variables before build
+      - name: Create .env file for production
+        run: |
+          echo "VITE_API_BASE_URL=https://nexus-backend.forteai.in/api" >> .env
+          echo "VITE_BACKEND_URL=https://nexus-backend.forteai.in" >> .env
+          cat .env   # just to verify in logs
 
       - name: Install Dependencies
         run: |
