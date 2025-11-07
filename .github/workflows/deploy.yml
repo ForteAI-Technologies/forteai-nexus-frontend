@@ -49,11 +49,13 @@ jobs:
           echo "🚀 Deploying full project to production..."
           
           # Step 7.1: Clean and prepare /tmp/frontend-full on Bastion
-          sshpass -p 'forteai@123' ssh -o StrictHostKeyChecking=no ec2-user@13.204.190.46 "mkdir -p /tmp/frontend-full && rm -rf /tmp/frontend-full/*"
+          sshpass -p 'forteai@123' ssh -o StrictHostKeyChecking=no ec2-user@13.204.190.46 "sudo rm -rf /tmp/frontend-full && mkdir -p /tmp/frontend-full && sudo chown ec2-user:ec2-user /tmp/frontend-full"
 
-          # Step 7.2: Copy full frontend code to Bastion
-          echo "📦 Copying code to Bastion..."
-          sshpass -p "forteai@123" scp -o StrictHostKeyChecking=no -r . ec2-user@13.204.190.46:/tmp/frontend-full/
+          # Step 7.2: Copy only required files (exclude .git, .github, node_modules, etc.)
+          echo "📦 Copying project files to Bastion..."
+          tar --exclude='.git' --exclude='.github' --exclude='node_modules' --exclude='.vscode' -czf project.tar.gz .
+          sshpass -p "forteai@123" scp -o StrictHostKeyChecking=no project.tar.gz ec2-user@13.204.190.46:/tmp/
+          sshpass -p "forteai@123" ssh -o StrictHostKeyChecking=no ec2-user@13.204.190.46 "tar -xzf /tmp/project.tar.gz -C /tmp/frontend-full && rm -f /tmp/project.tar.gz"
 
           # Step 7.3: Copy from Bastion to Frontend EC2
           echo "📤 Copying from Bastion to Frontend EC2..."
