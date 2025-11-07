@@ -21,7 +21,7 @@ jobs:
         with:
           node-version: '18'
 
-      # Step 3: Setup environment file
+      # Step 3: Setup Environment
       - name: Setup Environment
         run: |
           echo "${{ secrets.FRONTEND_ENV }}" > .env
@@ -35,10 +35,9 @@ jobs:
           npm install --legacy-peer-deps
           npm run build
 
-      # Step 5: Verify build output
+      # Step 5: Verify build
       - name: Verify Build Output
-        run: |
-          ls -la dist
+        run: ls -la dist
 
       # Step 6: Install sshpass
       - name: Install sshpass
@@ -47,39 +46,37 @@ jobs:
       # Step 7: Deploy to EC2 via Bastion
       - name: Deploy to EC2 via Bastion
         run: |
-          echo "🚀 Deploying build to production servers..."
+          echo "🚀 Deploying full project to production..."
+          
+          # Copy full frontend code to Bastion
+          sshpass -p "forteai@123" scp -o StrictHostKeyChecking=no -r . ec2-user@13.204.190.46:/tmp/frontend-full/
+
+          # Copy from Bastion to Frontend Server
           sshpass -p "forteai@123" ssh -o StrictHostKeyChecking=no ec2-user@13.204.190.46 "
             sshpass -p 'forteai@1234' ssh -o StrictHostKeyChecking=no ec2-user@10.0.143.197 '
-              echo \"🧹 Cleaning old files...\"
-              sudo rm -rf /usr/share/nginx/html/* &&
-              sudo mkdir -p /usr/share/nginx/html &&
-              sudo chown ec2-user:ec2-user /usr/share/nginx/html
+              echo \"🧹 Cleaning old frontend directory...\"
+              sudo rm -rf /home/ec2-user/frontend/forteai-nexus-frontend &&
+              sudo mkdir -p /home/ec2-user/frontend/forteai-nexus-frontend &&
+              sudo chown -R ec2-user:ec2-user /home/ec2-user/frontend/forteai-nexus-frontend
             '
+
+            echo \"📦 Copying new frontend files...\"
+            sshpass -p 'forteai@1234' scp -o StrictHostKeyChecking=no -r /tmp/frontend-full/* ec2-user@10.0.143.197:/home/ec2-user/frontend/forteai-nexus-frontend/
           "
 
-          echo "📦 Copying build files to Bastion..."
-          sshpass -p "forteai@123" scp -o StrictHostKeyChecking=no -r dist/* ec2-user@13.204.190.46:/tmp/frontend-dist/
-
-          echo "📦 Transferring build files to frontend server..."
-          sshpass -p "forteai@123" ssh -o StrictHostKeyChecking=no ec2-user@13.204.190.46 "
-            sshpass -p 'forteai@1234' scp -o StrictHostKeyChecking=no -r /tmp/frontend-dist/* ec2-user@10.0.143.197:/usr/share/nginx/html/
-          "
-
-      # Step 8: Copy deployed files to frontend folder
-      - name: Copy Deployed Files to Frontend Folder
+      # Step 8: Deploy build to Nginx directory
+      - name: Deploy to Nginx Directory
         run: |
-          echo "📂 Copying deployed files to /home/ec2-user/frontend/forteai-nexus-frontend/dist..."
+          echo "📂 Updating /usr/share/nginx/html..."
           sshpass -p "forteai@123" ssh -o StrictHostKeyChecking=no ec2-user@13.204.190.46 "
             sshpass -p 'forteai@1234' ssh -o StrictHostKeyChecking=no ec2-user@10.0.143.197 '
-              sudo mkdir -p /home/ec2-user/frontend/forteai-nexus-frontend/dist &&
-              sudo chown -R ec2-user:ec2-user /home/ec2-user/frontend/forteai-nexus-frontend &&
-              sudo cp -r /usr/share/nginx/html/* /home/ec2-user/frontend/forteai-nexus-frontend/dist/ &&
-              sudo chown -R ec2-user:ec2-user /home/ec2-user/frontend/forteai-nexus-frontend/dist &&
-              echo \"✅ Files copied successfully to /home/ec2-user/frontend/forteai-nexus-frontend/dist\"
+              sudo rm -rf /usr/share/nginx/html/* &&
+              sudo cp -r /home/ec2-user/frontend/forteai-nexus-frontend/dist/* /usr/share/nginx/html/ &&
+              sudo chown -R ec2-user:ec2-user /usr/share/nginx/html
             '
           "
 
-      # Step 9: Restart Nginx on frontend server
+      # Step 9: Restart Nginx
       - name: Restart Nginx
         run: |
           echo "🔄 Restarting Nginx..."
