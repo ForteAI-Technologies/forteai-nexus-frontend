@@ -35,7 +35,7 @@ jobs:
           npm install --legacy-peer-deps
           npm run build
 
-      # Step 5: Verify build
+      # Step 5: Verify build output
       - name: Verify Build Output
         run: ls -la dist
 
@@ -47,28 +47,26 @@ jobs:
       - name: Deploy to EC2 via Bastion
         run: |
           echo "🚀 Deploying full project to production..."
-          
-          # Step 7.1: Clean and prepare /tmp/frontend-full on Bastion
-          sshpass -p 'forteai@123' ssh -o StrictHostKeyChecking=no ec2-user@13.204.190.46 "sudo rm -rf /tmp/frontend-full && mkdir -p /tmp/frontend-full && sudo chown ec2-user:ec2-user /tmp/frontend-full"
 
-          # Step 7.2: Copy only required files (exclude .git, .github, node_modules, etc.)
+          echo "📦 Preparing deployment package..."
+          tar --exclude='.git' --exclude='node_modules' -czf frontend-full.tar.gz . --warning=no-file-changed || true
+
           echo "📦 Copying project files to Bastion..."
-          tar --exclude='.git' --exclude='.github' --exclude='node_modules' --exclude='.vscode' -czf project.tar.gz .
-          sshpass -p "forteai@123" scp -o StrictHostKeyChecking=no project.tar.gz ec2-user@13.204.190.46:/tmp/
-          sshpass -p "forteai@123" ssh -o StrictHostKeyChecking=no ec2-user@13.204.190.46 "tar -xzf /tmp/project.tar.gz -C /tmp/frontend-full && rm -f /tmp/project.tar.gz"
+          sshpass -p "forteai@123" ssh -o StrictHostKeyChecking=no ec2-user@13.204.190.46 "mkdir -p /tmp/frontend-full && rm -rf /tmp/frontend-full/*"
+          sshpass -p "forteai@123" scp -o StrictHostKeyChecking=no frontend-full.tar.gz ec2-user@13.204.190.46:/tmp/frontend-full/
 
-          # Step 7.3: Copy from Bastion to Frontend EC2
-          echo "📤 Copying from Bastion to Frontend EC2..."
+          echo "📦 Extracting files on Bastion..."
           sshpass -p "forteai@123" ssh -o StrictHostKeyChecking=no ec2-user@13.204.190.46 "
+            cd /tmp/frontend-full &&
+            tar -xzf frontend-full.tar.gz &&
             sshpass -p 'forteai@1234' ssh -o StrictHostKeyChecking=no ec2-user@10.0.143.197 '
               echo \"🧹 Cleaning old frontend directory...\"
               sudo rm -rf /home/ec2-user/frontend/forteai-nexus-frontend &&
               sudo mkdir -p /home/ec2-user/frontend/forteai-nexus-frontend &&
               sudo chown -R ec2-user:ec2-user /home/ec2-user/frontend/forteai-nexus-frontend
-            '
-
-            echo \"📦 Copying new frontend files...\"
-            sshpass -p 'forteai@1234' scp -o StrictHostKeyChecking=no -r /tmp/frontend-full/* ec2-user@10.0.143.197:/home/ec2-user/frontend/forteai-nexus-frontend/
+            ' &&
+            echo \"📤 Copying files to frontend server...\"
+            sshpass -p 'forteai@1234' scp -o StrictHostKeyChecking=no -r ./dist/* ec2-user@10.0.143.197:/home/ec2-user/frontend/forteai-nexus-frontend/
           "
 
       # Step 8: Deploy build to Nginx directory
@@ -78,7 +76,7 @@ jobs:
           sshpass -p "forteai@123" ssh -o StrictHostKeyChecking=no ec2-user@13.204.190.46 "
             sshpass -p 'forteai@1234' ssh -o StrictHostKeyChecking=no ec2-user@10.0.143.197 '
               sudo rm -rf /usr/share/nginx/html/* &&
-              sudo cp -r /home/ec2-user/frontend/forteai-nexus-frontend/dist/* /usr/share/nginx/html/ &&
+              sudo cp -r /home/ec2-user/frontend/forteai-nexus-frontend/* /usr/share/nginx/html/ &&
               sudo chown -R ec2-user:ec2-user /usr/share/nginx/html
             '
           "
