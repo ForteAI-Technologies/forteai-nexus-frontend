@@ -1,89 +1,99 @@
-name: Frontend Deployment Pipeline
- 
+name: Frontend Deployment Pipeline (Production)
+
 on:
-
   push:
-
     branches:
-
       - main
-
   workflow_dispatch:
- 
+
 jobs:
-
   deploy:
-
     runs-on: ubuntu-latest
- 
+
     steps:
-
-      # 1️⃣ Checkout the repository
-
-      - name: Checkout Repository
-
+      # ✅ Step 1: Checkout Code
+      - name: Checkout Code
         uses: actions/checkout@v3
- 
-      # 2️⃣ Install sshpass
 
-      - name: Install sshpass
+      # ✅ Step 2: Setup Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
 
-        run: sudo apt-get install -y sshpass
- 
-      # 3️⃣ Build the frontend project
-
-      - name: Build Frontend
-
+      # ✅ Step 3: Load environment from GitHub Secret
+      - name: Setup Environment
         run: |
+          echo "${{ secrets.FRONTEND_ENV }}" > .env
+          echo "✅ Loaded environment variables from GitHub Secrets"
+          cat .env
 
-          npm install
-
+      # ✅ Step 4: Clean and Build
+      - name: Install Dependencies & Build
+        run: |
+          rm -rf node_modules dist
+          npm install --legacy-peer-deps
           npm run build
- 
-      # 4️⃣ Copy build files to Bastion Host
 
-      - name: Copy Build to Bastion
-
+      # ✅ Step 5: Verify Build Output
+      - name: Verify Build Output
         run: |
+          echo "✅ Build folder structure:"
+          ls -la dist
 
-          sshpass -p "$BASTION_PASS" scp -o StrictHostKeyChecking=no -r dist ec2-user@13.204.190.46:/tmp/frontend-dist
- 
-      # 5️⃣ SSH into Bastion and then into Frontend server to deploy
+      # ✅ Step 6: Install sshpass
+      - name: Install sshpass
+        run: sudo apt-get update && sudo apt-get install -y sshpass
 
-      - name: Deploy to Frontend Server via Bastion
-
+      # ✅ Step 7: Deploy to EC2 via Bastion
+      - name: Deploy to EC2 via Bastion
+        env:
+          BASTION_PASS: ${{ secrets.BASTION_PASS }}
+          FRONTEND_PASS: ${{ secrets.FRONTEND_PASS }}
         run: |
-
+          echo "🚀 Deploying build to frontend server via Bastion..."
+          # Clean & prepare target directory
           sshpass -p "$BASTION_PASS" ssh -o StrictHostKeyChecking=no ec2-user@13.204.190.46 "
-
             sshpass -p \"$FRONTEND_PASS\" ssh -o StrictHostKeyChecking=no ec2-user@10.0.143.197 '
-
               sudo rm -rf /usr/share/nginx/html/* &&
-
-              sudo cp -r /tmp/frontend-dist/* /usr/share/nginx/html/ &&
-
-              sudo systemctl restart nginx
-
+              sudo mkdir -p /usr/share/nginx/html &&
+              sudo chown ec2-user:ec2-user /usr/share/nginx/html
             '
-
           "
- 
-      # 6️⃣ Copy deployed files for verification (new step)
-
-      - name: Copy Deployed Files to Project Folder (for visibility)
-
-        run: |
-
+          # Copy dist to Bastion
+          sshpass -p "$BASTION_PASS" ssh -o StrictHostKeyChecking=no ec2-user@13.204.190.46 "rm -rf /tmp/frontend-dist && mkdir -p /tmp/frontend-dist"
+          sshpass -p "$BASTION_PASS" scp -o StrictHostKeyChecking=no -r dist/* ec2-user@13.204.190.46:/tmp/frontend-dist/
+          # Copy from Bastion to Frontend EC2
           sshpass -p "$BASTION_PASS" ssh -o StrictHostKeyChecking=no ec2-user@13.204.190.46 "
-
-            sshpass -p \"$FRONTEND_PASS\" ssh -o StrictHostKeyChecking=no ec2-user@10.0.143.197 '
-
-              mkdir -p /home/ec2-user/frontend/forteai-nexus-frontend/dist &&
-
-              sudo cp -r /usr/share/nginx/html/* /home/ec2-user/frontend/forteai-nexus-frontend/dist/
-
-            '
-
+            sshpass -p \"$FRONTEND_PASS\" scp -o StrictHostKeyChecking=no -r /tmp/frontend-dist/* ec2-user@10.0.143.197:/usr/share/nginx/html/
           "
- 
- 
+
+      # ✅ Step 8: Copy deployed files to frontend project folder
+      - name: Copy Deployed Files for Validation
+        env:
+          BASTION_PASS: ${{ secrets.BASTION_PASS }}
+          FRONTEND_PASS: ${{ secrets.FRONTEND_PASS }}
+        run: |
+          echo "📂 Copying deployed files to /home/ec2-user/frontend/forteai-nexus-frontend/dist for visibility..."
+          sshpass -p "$BASTION_PASS" ssh -o StrictHostKeyChecking=no ec2-user@13.204.190.46 "
+            sshpass -p \"$FRONTEND_PASS\" ssh -o StrictHostKeyChecking=no ec2-user@10.0.143.197 '
+              mkdir -p /home/ec2-user/frontend/forteai-nexus-frontend/dist &&
+              sudo cp -r /usr/share/nginx/html/* /home/ec2-user/frontend/forteai-nexus-frontend/dist/ &&
+              sudo chown -R ec2-user:ec2-user /home/ec2-user/frontend/forteai-nexus-frontend/dist
+            '
+          "
+
+      # ✅ Step 9: Restart Nginx
+      - name: Restart Nginx
+        env:
+          BASTION_PASS: ${{ secrets.BASTION_PASS }}
+          FRONTEND_PASS: ${{ secrets.FRONTEND_PASS }}
+        run: |
+          echo "🔄 Restarting Nginx..."
+          sshpass -p "$BASTION_PASS" ssh -o StrictHostKeyChecking=no ec2-user@13.204.190.46 "
+            sshpass -p \"$FRONTEND_PASS\" ssh -o StrictHostKeyChecking=no ec2-user@10.0.143.197 '
+              sudo systemctl restart nginx &&
+              echo \"✅ Nginx restarted successfully.\"
+            '
+          "
+
