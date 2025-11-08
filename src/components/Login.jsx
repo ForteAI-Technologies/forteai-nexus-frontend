@@ -210,7 +210,7 @@ const Login = ({ onLogin }) => {
           <div className="login-card">
             <div className="login-header">
               <h1 className="login-title">
-                ForteAI <span style={{ color: "#0A3D91" }}>Nexus</span>
+                <span style={{ color: "#0A3D91" }}>Nexus</span>
               </h1>
               <p className="login-subtitle">Connecting Talent and Insight.</p>
             </div>
