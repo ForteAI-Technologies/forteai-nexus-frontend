@@ -15,7 +15,7 @@ export default defineConfig(({ mode }) => {
       // hmr: { host: '192.168.x.x' },
       allowedHosts: [
         'nexus.forteai.in',
-        'nexus.forteai.in','localhost:5173','localhost',
+        'nexus-poc.forteai.in','localhost:5173','localhost',
         '10.40.0.24:5173'],
       proxy: {
         '/api': {
