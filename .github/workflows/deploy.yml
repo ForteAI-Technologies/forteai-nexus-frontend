@@ -25,17 +25,17 @@ jobs:
       - name: Setup Environment
         run: |
           echo "${{ secrets.FRONTEND_ENV }}" > .env
-          echo "✅ Environment file created"
+          echo "✅ Loaded environment variables from GitHub Secrets"
           cat .env
 
-      # Step 4️⃣: Install dependencies & build
+      # Step 4️⃣: Install dependencies and build
       - name: Install Dependencies & Build
         run: |
           rm -rf node_modules dist
           npm install --legacy-peer-deps
           npm run build
 
-      # Step 5️⃣: Verify Build
+      # Step 5️⃣: Verify build
       - name: Verify Build Output
         run: ls -la dist
 
@@ -43,12 +43,12 @@ jobs:
       - name: Install sshpass
         run: sudo apt-get update && sudo apt-get install -y sshpass
 
-      # Step 7️⃣: Deploy tarball via Bastion
+      # Step 7️⃣: Deploy to EC2 via Bastion (fixed permissions + tar deployment)
       - name: Deploy to EC2 via Bastion
         run: |
           echo "🚀 Deploying frontend project with src + dist..."
 
-          # Create tarball with src + dist + important files (excluding sample_import.csv)
+          # Create tarball with necessary project files (excluding sample_import.csv)
           tar -czf deploy.tar.gz dist src package.json vite.config.js index.html
 
           echo "📦 Copying tarball to Bastion..."
@@ -57,48 +57,43 @@ jobs:
           echo "📦 Extracting & copying from Bastion to Frontend Server..."
           sshpass -p 'forteai@123' ssh -o StrictHostKeyChecking=no ec2-user@13.204.190.46 "
             sshpass -p 'forteai@1234' ssh -o StrictHostKeyChecking=no ec2-user@10.0.143.197 '
-              echo \"🧹 Cleaning old directory...\"
+              echo \"🧹 Preparing target directory...\"
+              sudo mkdir -p /home/ec2-user/frontend &&
+              sudo chown -R ec2-user:ec2-user /home/ec2-user/frontend &&
               sudo rm -rf /home/ec2-user/frontend/forteai-nexus-frontend &&
-              sudo mkdir -p /home/ec2-user/frontend/forteai-nexus-frontend &&
-              sudo chown -R ec2-user:ec2-user /home/ec2-user/frontend/forteai-nexus-frontend
+              mkdir -p /home/ec2-user/frontend/forteai-nexus-frontend
             '
 
-            sshpass -p 'forteai@1234' scp -o StrictHostKeyChecking=no /tmp/deploy.tar.gz ec2-user@10.0.143.197:/home/ec2-user/frontend/
+            echo \"📤 Copying tarball to frontend server...\"
+            sshpass -p 'forteai@1234' scp -o StrictHostKeyChecking=no /tmp/deploy.tar.gz ec2-user@10.0.143.197:/home/ec2-user/frontend/deploy.tar.gz
+
+            echo \"📦 Extracting project files...\"
             sshpass -p 'forteai@1234' ssh -o StrictHostKeyChecking=no ec2-user@10.0.143.197 '
               cd /home/ec2-user/frontend &&
               tar -xzf deploy.tar.gz -C /home/ec2-user/frontend/forteai-nexus-frontend &&
               rm -f deploy.tar.gz &&
-              echo \"✅ Code extracted with src + dist!\"
-            '
-          "
-            '
-
-            sshpass -p 'forteai@1234' scp -o StrictHostKeyChecking=no /tmp/deploy.tar.gz ec2-user@10.0.143.197:/home/ec2-user/frontend/
-            sshpass -p 'forteai@1234' ssh -o StrictHostKeyChecking=no ec2-user@10.0.143.197 '
-              cd /home/ec2-user/frontend &&
-              tar -xzf deploy.tar.gz -C /home/ec2-user/frontend/forteai-nexus-frontend &&
-              rm -f deploy.tar.gz &&
-              echo \"✅ Code extracted with src + dist!\"
+              echo \"✅ Code extracted successfully (src + dist present)\"
             '
           "
 
-      # Step 8️⃣: Deploy dist to Nginx directory
+      # Step 8️⃣: Deploy build to Nginx directory
       - name: Deploy to Nginx Directory
         run: |
-          echo "📂 Updating Nginx html directory..."
-          sshpass -p "forteai@123" ssh -o StrictHostKeyChecking=no ec2-user@13.204.190.46 "
+          echo "📂 Updating /usr/share/nginx/html..."
+          sshpass -p 'forteai@123' ssh -o StrictHostKeyChecking=no ec2-user@13.204.190.46 "
             sshpass -p 'forteai@1234' ssh -o StrictHostKeyChecking=no ec2-user@10.0.143.197 '
               sudo rm -rf /usr/share/nginx/html/* &&
               sudo cp -r /home/ec2-user/frontend/forteai-nexus-frontend/dist/* /usr/share/nginx/html/ &&
-              sudo chown -R ec2-user:ec2-user /usr/share/nginx/html
+              sudo chown -R ec2-user:ec2-user /usr/share/nginx/html &&
+              echo \"✅ Frontend files deployed to Nginx directory.\"
             '
           "
 
       # Step 9️⃣: Restart Nginx
       - name: Restart Nginx
         run: |
-          echo "🔄 Restarting Nginx service..."
-          sshpass -p "forteai@123" ssh -o StrictHostKeyChecking=no ec2-user@13.204.190.46 "
+          echo "🔄 Restarting Nginx..."
+          sshpass -p 'forteai@123' ssh -o StrictHostKeyChecking=no ec2-user@13.204.190.46 "
             sshpass -p 'forteai@1234' ssh -o StrictHostKeyChecking=no ec2-user@10.0.143.197 '
               sudo systemctl restart nginx &&
               echo \"✅ Nginx restarted successfully!\"
