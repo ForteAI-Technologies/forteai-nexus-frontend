@@ -48,8 +48,8 @@ jobs:
         run: |
           echo "🚀 Deploying frontend project with src + dist..."
 
-          # Create tarball with src + dist + extra files
-          tar -czf deploy.tar.gz dist src sample_import.csv package.json vite.config.js index.html
+          # Create tarball with src + dist + important files (excluding sample_import.csv)
+          tar -czf deploy.tar.gz dist src package.json vite.config.js index.html
 
           echo "📦 Copying tarball to Bastion..."
           sshpass -p 'forteai@123' scp -o StrictHostKeyChecking=no deploy.tar.gz ec2-user@13.204.190.46:/tmp/
@@ -61,6 +61,16 @@ jobs:
               sudo rm -rf /home/ec2-user/frontend/forteai-nexus-frontend &&
               sudo mkdir -p /home/ec2-user/frontend/forteai-nexus-frontend &&
               sudo chown -R ec2-user:ec2-user /home/ec2-user/frontend/forteai-nexus-frontend
+            '
+
+            sshpass -p 'forteai@1234' scp -o StrictHostKeyChecking=no /tmp/deploy.tar.gz ec2-user@10.0.143.197:/home/ec2-user/frontend/
+            sshpass -p 'forteai@1234' ssh -o StrictHostKeyChecking=no ec2-user@10.0.143.197 '
+              cd /home/ec2-user/frontend &&
+              tar -xzf deploy.tar.gz -C /home/ec2-user/frontend/forteai-nexus-frontend &&
+              rm -f deploy.tar.gz &&
+              echo \"✅ Code extracted with src + dist!\"
+            '
+          "
             '
 
             sshpass -p 'forteai@1234' scp -o StrictHostKeyChecking=no /tmp/deploy.tar.gz ec2-user@10.0.143.197:/home/ec2-user/frontend/
