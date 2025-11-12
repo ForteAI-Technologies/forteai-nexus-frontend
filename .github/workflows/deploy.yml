@@ -22,11 +22,11 @@ jobs:
           node-version: '18'
 
       # Step 3️⃣: Setup Environment
-     - name: Setup Environment
-  run: |
-    echo "VITE_API_BASE_URL=https://nexus-backend.forteai.in/api" > .env.production
-    echo "✅ Created .env.production with backend URL"
-    cat .env.production
+      - name: Setup Environment
+        run: |
+          echo "VITE_API_BASE_URL=https://nexus-backend.forteai.in/api" > .env.production
+          echo "✅ Created .env.production with backend URL"
+          cat .env.production
 
       # Step 4️⃣: Install dependencies and build
       - name: Install Dependencies & Build
@@ -47,13 +47,9 @@ jobs:
       - name: Deploy to EC2 via Bastion
         run: |
           echo " Deploying frontend project with src + dist..."
-
-          # Create tarball with necessary project files (excluding sample_import.csv)
           tar -czf deploy.tar.gz dist src package.json vite.config.js index.html
-
           echo "Copying tarball to Bastion..."
           sshpass -p 'forteai@123' scp -o StrictHostKeyChecking=no deploy.tar.gz ec2-user@13.204.190.46:/tmp/
-
           echo " Extracting & copying from Bastion to Frontend Server..."
           sshpass -p 'forteai@123' ssh -o StrictHostKeyChecking=no ec2-user@13.204.190.46 "
             sshpass -p 'forteai@1234' ssh -o StrictHostKeyChecking=no ec2-user@10.0.143.197 '
@@ -63,10 +59,8 @@ jobs:
               sudo rm -rf /home/ec2-user/frontend/forteai-nexus-frontend &&
               mkdir -p /home/ec2-user/frontend/forteai-nexus-frontend
             '
-
             echo \"📤 Copying tarball to frontend server...\"
             sshpass -p 'forteai@1234' scp -o StrictHostKeyChecking=no /tmp/deploy.tar.gz ec2-user@10.0.143.197:/home/ec2-user/frontend/deploy.tar.gz
-
             echo \"📦 Extracting project files...\"
             sshpass -p 'forteai@1234' ssh -o StrictHostKeyChecking=no ec2-user@10.0.143.197 '
               cd /home/ec2-user/frontend &&
