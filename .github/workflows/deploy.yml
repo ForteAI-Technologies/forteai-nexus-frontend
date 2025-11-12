@@ -22,11 +22,11 @@ jobs:
           node-version: '18'
 
       # Step 3️⃣: Setup Environment
-      - name: Setup Environment
-        run: |
-          echo "${{ secrets.FRONTEND_ENV }}" > .env
-          echo "✅ Loaded environment variables from GitHub Secrets"
-          cat .env
+     - name: Setup Environment
+  run: |
+    echo "VITE_API_BASE_URL=https://nexus-backend.forteai.in/api" > .env.production
+    echo "✅ Created .env.production with backend URL"
+    cat .env.production
 
       # Step 4️⃣: Install dependencies and build
       - name: Install Dependencies & Build
@@ -83,7 +83,7 @@ jobs:
           sshpass -p 'forteai@123' ssh -o StrictHostKeyChecking=no ec2-user@13.204.190.46 "
             sshpass -p 'forteai@1234' ssh -o StrictHostKeyChecking=no ec2-user@10.0.143.197 '
               sudo rm -rf /usr/share/nginx/html/* &&
-              sudo cp -r /home/ec2-user/frontend/forteai-nexus-frontend/dist/* /usr/share/nginx/html/ &&
+              sudo cp -r /home/ec2-user/frontend/forteai-nexus-frontend/dist/* /var/www/frontend/ &&
               sudo chown -R ec2-user:ec2-user /usr/share/nginx/html &&
               echo \"✅ Frontend files deployed to Nginx directory.\"
             '
