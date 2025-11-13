@@ -31,7 +31,7 @@ const Login = ({ onLogin }) => {
     setError(""); // Clear error when user starts typing
   };
   console.log("at the login.jsx,",API_BASE_URL );
-  console.log("It's Working");
+  // console.log("It's Working");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -210,7 +210,7 @@ const Login = ({ onLogin }) => {
           <div className="login-card">
             <div className="login-header">
               <h1 className="login-title">
-                <span style={{ color: "#0A3D91" }}>Nexus</span>
+                ForteAI <span style={{ color: "#0A3D91" }}>Nexus</span>
               </h1>
               <p className="login-subtitle">Connecting Talent and Insight.</p>
             </div>
