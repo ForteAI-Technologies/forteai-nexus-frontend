@@ -12,11 +12,25 @@
 ~H
 # Command Line History (newest to oldest):
 :wq!
-|2,0,1763536344,,"wq!"
+|2,0,1763635365,,"wq!"
+:82
+|2,0,1763635113,,"82"
+:q!
+|2,0,1763634902,,"q!"
+:97
+|2,0,1763634884,,"97"
+:91
+|2,0,1763634844,,"91"
+:60
+|2,0,1763634803,,"60"
+:75
+|2,0,1763634168,,"75"
+:50
+|2,0,1763634018,,"50"
+:30
+|2,0,1763633897,,"30"
 :126
 |2,0,1763536310,,"126"
-:q!
-|2,0,1763534803,,"q!"
 :34
 |2,0,1763032483,,"34"
 :406
@@ -64,230 +78,238 @@
 |3,0,5,1,1,0,1763028640,"      const resp = await fetch('/api/admin/companies', {"
 
 # File marks:
-'0  139  4  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
-|4,48,139,4,1763536344,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
-'1  126  1  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
-|4,49,126,1,1763536144,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
-'2  126  1  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
-|4,50,126,1,1763536144,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
-'3  131  8  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
-|4,51,131,8,1763534853,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
-'4  132  8  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
-|4,52,132,8,1763534853,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
-'5  131  8  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
-|4,53,131,8,1763534853,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
-'6  132  8  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
-|4,54,132,8,1763534853,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
-'7  177  6  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
-|4,55,177,6,1763534803,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
-'8  176  6  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
-|4,56,176,6,1763534803,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
-'9  178  6  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
-|4,57,178,6,1763534803,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+'0  79  114  ~/frontend/forteai-nexus-frontend/src/components/BulkDownloadReports.jsx
+|4,48,79,114,1763635365,"~/frontend/forteai-nexus-frontend/src/components/BulkDownloadReports.jsx"
+'1  104  0  ~/frontend/forteai-nexus-frontend/src/components/BulkDownloadReports.jsx
+|4,49,104,0,1763634902,"~/frontend/forteai-nexus-frontend/src/components/BulkDownloadReports.jsx"
+'2  104  0  ~/frontend/forteai-nexus-frontend/src/components/BulkDownloadReports.jsx
+|4,50,104,0,1763634902,"~/frontend/forteai-nexus-frontend/src/components/BulkDownloadReports.jsx"
+'3  75  8  ~/frontend/forteai-nexus-frontend/src/components/BulkDownloadReports.jsx
+|4,51,75,8,1763634276,"~/frontend/forteai-nexus-frontend/src/components/BulkDownloadReports.jsx"
+'4  75  8  ~/frontend/forteai-nexus-frontend/src/components/BulkDownloadReports.jsx
+|4,52,75,8,1763634276,"~/frontend/forteai-nexus-frontend/src/components/BulkDownloadReports.jsx"
+'5  75  8  ~/frontend/forteai-nexus-frontend/src/components/BulkDownloadReports.jsx
+|4,53,75,8,1763634276,"~/frontend/forteai-nexus-frontend/src/components/BulkDownloadReports.jsx"
+'6  75  8  ~/frontend/forteai-nexus-frontend/src/components/BulkDownloadReports.jsx
+|4,54,75,8,1763634276,"~/frontend/forteai-nexus-frontend/src/components/BulkDownloadReports.jsx"
+'7  97  10  ~/frontend/forteai-nexus-frontend/src/components/BulkDownloadReports.jsx
+|4,55,97,10,1763623350,"~/frontend/forteai-nexus-frontend/src/components/BulkDownloadReports.jsx"
+'8  97  10  ~/frontend/forteai-nexus-frontend/src/components/BulkDownloadReports.jsx
+|4,56,97,10,1763623350,"~/frontend/forteai-nexus-frontend/src/components/BulkDownloadReports.jsx"
+'9  97  10  ~/frontend/forteai-nexus-frontend/src/components/BulkDownloadReports.jsx
+|4,57,97,10,1763623350,"~/frontend/forteai-nexus-frontend/src/components/BulkDownloadReports.jsx"
 
 # Jumplist (newest first):
+-'  79  114  ~/frontend/forteai-nexus-frontend/src/components/BulkDownloadReports.jsx
+|4,39,79,114,1763635365,"~/frontend/forteai-nexus-frontend/src/components/BulkDownloadReports.jsx"
+-'  104  0  ~/frontend/forteai-nexus-frontend/src/components/BulkDownloadReports.jsx
+|4,39,104,0,1763635108,"~/frontend/forteai-nexus-frontend/src/components/BulkDownloadReports.jsx"
+-'  104  0  ~/frontend/forteai-nexus-frontend/src/components/BulkDownloadReports.jsx
+|4,39,104,0,1763634902,"~/frontend/forteai-nexus-frontend/src/components/BulkDownloadReports.jsx"
+-'  75  8  ~/frontend/forteai-nexus-frontend/src/components/BulkDownloadReports.jsx
+|4,39,75,8,1763634797,"~/frontend/forteai-nexus-frontend/src/components/BulkDownloadReports.jsx"
+-'  75  8  ~/frontend/forteai-nexus-frontend/src/components/BulkDownloadReports.jsx
+|4,39,75,8,1763634797,"~/frontend/forteai-nexus-frontend/src/components/BulkDownloadReports.jsx"
+-'  75  8  ~/frontend/forteai-nexus-frontend/src/components/BulkDownloadReports.jsx
+|4,39,75,8,1763634276,"~/frontend/forteai-nexus-frontend/src/components/BulkDownloadReports.jsx"
+-'  97  10  ~/frontend/forteai-nexus-frontend/src/components/BulkDownloadReports.jsx
+|4,39,97,10,1763633890,"~/frontend/forteai-nexus-frontend/src/components/BulkDownloadReports.jsx"
+-'  97  10  ~/frontend/forteai-nexus-frontend/src/components/BulkDownloadReports.jsx
+|4,39,97,10,1763633890,"~/frontend/forteai-nexus-frontend/src/components/BulkDownloadReports.jsx"
+-'  97  10  ~/frontend/forteai-nexus-frontend/src/components/BulkDownloadReports.jsx
+|4,39,97,10,1763633890,"~/frontend/forteai-nexus-frontend/src/components/BulkDownloadReports.jsx"
+-'  97  10  ~/frontend/forteai-nexus-frontend/src/components/BulkDownloadReports.jsx
+|4,39,97,10,1763623350,"~/frontend/forteai-nexus-frontend/src/components/BulkDownloadReports.jsx"
+-'  1  0  ~/frontend/forteai-nexus-frontend/src/components/BulkDownloadReports.jsx
+|4,39,1,0,1763623173,"~/frontend/forteai-nexus-frontend/src/components/BulkDownloadReports.jsx"
+-'  1  0  ~/frontend/forteai-nexus-frontend/src/components/BulkDownloadReports.jsx
+|4,39,1,0,1763623173,"~/frontend/forteai-nexus-frontend/src/components/BulkDownloadReports.jsx"
+-'  1  0  ~/frontend/forteai-nexus-frontend/src/components/BulkDownloadReports.jsx
+|4,39,1,0,1763623173,"~/frontend/forteai-nexus-frontend/src/components/BulkDownloadReports.jsx"
+-'  1  0  ~/frontend/forteai-nexus-frontend/src/components/BulkDownloadReports.jsx
+|4,39,1,0,1763623173,"~/frontend/forteai-nexus-frontend/src/components/BulkDownloadReports.jsx"
+-'  139  4  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,139,4,1763536344,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  139  4  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,139,4,1763536344,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  139  4  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,139,4,1763536344,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  139  4  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,139,4,1763536344,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  139  4  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,139,4,1763536344,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  139  4  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,139,4,1763536344,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  139  4  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,139,4,1763536344,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  139  4  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,139,4,1763536344,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  139  4  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,139,4,1763536344,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  139  4  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,139,4,1763536344,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  139  4  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,139,4,1763536344,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  139  4  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,139,4,1763536344,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  139  4  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,139,4,1763536344,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  139  4  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,139,4,1763536344,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  139  4  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,139,4,1763536344,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
 -'  139  4  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
 |4,39,139,4,1763536344,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
 -'  126  1  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
 |4,39,126,1,1763536307,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  126  1  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,126,1,1763536307,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  126  1  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,126,1,1763536307,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  126  1  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,126,1,1763536307,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  126  1  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,126,1,1763536307,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  126  1  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,126,1,1763536307,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  126  1  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,126,1,1763536307,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  126  1  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,126,1,1763536307,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  126  1  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,126,1,1763536307,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  126  1  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,126,1,1763536307,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  126  1  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,126,1,1763536307,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  126  1  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,126,1,1763536307,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  126  1  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,126,1,1763536307,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  126  1  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,126,1,1763536307,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  126  1  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,126,1,1763536307,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  126  1  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,126,1,1763536307,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  126  1  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,126,1,1763536144,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  126  1  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,126,1,1763536144,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  126  1  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,126,1,1763536144,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  126  1  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,126,1,1763536144,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  126  1  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,126,1,1763536144,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  126  1  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,126,1,1763536144,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  126  1  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,126,1,1763536144,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  126  1  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,126,1,1763536144,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  126  1  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,126,1,1763536144,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  126  1  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,126,1,1763536144,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  126  1  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,126,1,1763536144,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  126  1  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,126,1,1763536144,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  126  1  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,126,1,1763536144,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  126  1  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,126,1,1763536144,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  126  1  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,126,1,1763536144,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
 -'  126  1  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
 |4,39,126,1,1763536144,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
 -'  131  8  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
 |4,39,131,8,1763536062,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
 -'  131  8  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
 |4,39,131,8,1763536062,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  131  8  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,131,8,1763536062,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  131  8  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,131,8,1763536062,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  131  8  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,131,8,1763536062,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  131  8  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,131,8,1763536062,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  131  8  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,131,8,1763536062,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  131  8  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,131,8,1763536062,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  131  8  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,131,8,1763536062,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  131  8  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,131,8,1763536062,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  131  8  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,131,8,1763536062,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  131  8  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,131,8,1763536062,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  131  8  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,131,8,1763536062,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  131  8  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,131,8,1763536062,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  131  8  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,131,8,1763536062,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  131  8  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,131,8,1763536062,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  131  8  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,131,8,1763536062,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  131  8  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,131,8,1763536062,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  131  8  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,131,8,1763536062,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  131  8  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,131,8,1763536062,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  131  8  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,131,8,1763536062,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  131  8  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,131,8,1763536062,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  131  8  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,131,8,1763536062,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  131  8  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,131,8,1763536062,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  131  8  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,131,8,1763536062,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  131  8  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,131,8,1763536062,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  131  8  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,131,8,1763536062,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  131  8  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,131,8,1763536062,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  131  8  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,131,8,1763536062,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  131  8  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,131,8,1763536062,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  131  8  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,131,8,1763536062,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  131  8  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,131,8,1763536062,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
 -'  132  8  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
 |4,39,132,8,1763534853,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
 -'  132  8  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
 |4,39,132,8,1763534853,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
--'  177  6  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
-|4,39,177,6,1763534805,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
--'  178  6  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
-|4,39,178,6,1763534805,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
--'  177  6  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
-|4,39,177,6,1763534805,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
--'  178  6  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
-|4,39,178,6,1763534805,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
--'  176  6  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
-|4,39,176,6,1763534803,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
--'  176  6  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
-|4,39,176,6,1763534803,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
--'  177  6  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
-|4,39,177,6,1763534803,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
--'  126  4  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
-|4,39,126,4,1763534782,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
--'  126  4  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
-|4,39,126,4,1763534782,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
--'  126  4  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
-|4,39,126,4,1763534536,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
--'  125  91  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
-|4,39,125,91,1763534386,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
--'  125  91  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
-|4,39,125,91,1763534386,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
--'  125  91  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
-|4,39,125,91,1763534386,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
--'  125  91  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
-|4,39,125,91,1763534386,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
--'  125  91  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
-|4,39,125,91,1763534386,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
--'  1  0  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
-|4,39,1,0,1763534277,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
--'  1  0  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
-|4,39,1,0,1763534277,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
--'  1  0  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
-|4,39,1,0,1763534277,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
--'  1  0  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
-|4,39,1,0,1763534277,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
--'  1  0  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
-|4,39,1,0,1763534277,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
--'  1  0  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
-|4,39,1,0,1763534277,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
--'  94  6  ~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx
-|4,39,94,6,1763032572,"~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx"
--'  94  6  ~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx
-|4,39,94,6,1763032572,"~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx"
--'  94  6  ~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx
-|4,39,94,6,1763032572,"~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx"
--'  94  6  ~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx
-|4,39,94,6,1763032572,"~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx"
--'  94  6  ~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx
-|4,39,94,6,1763032572,"~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx"
--'  94  6  ~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx
-|4,39,94,6,1763032572,"~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx"
--'  94  6  ~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx
-|4,39,94,6,1763032572,"~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx"
--'  94  6  ~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx
-|4,39,94,6,1763032572,"~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx"
--'  94  6  ~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx
-|4,39,94,6,1763032572,"~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx"
--'  94  6  ~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx
-|4,39,94,6,1763032572,"~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx"
--'  94  6  ~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx
-|4,39,94,6,1763032572,"~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx"
--'  94  6  ~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx
-|4,39,94,6,1763032572,"~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx"
--'  94  6  ~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx
-|4,39,94,6,1763032572,"~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx"
--'  94  6  ~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx
-|4,39,94,6,1763032572,"~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx"
--'  94  6  ~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx
-|4,39,94,6,1763032572,"~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx"
--'  94  6  ~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx
-|4,39,94,6,1763032572,"~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx"
--'  94  6  ~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx
-|4,39,94,6,1763032572,"~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx"
--'  94  6  ~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx
-|4,39,94,6,1763032572,"~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx"
--'  94  6  ~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx
-|4,39,94,6,1763032572,"~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx"
--'  94  6  ~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx
-|4,39,94,6,1763032572,"~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx"
--'  94  6  ~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx
-|4,39,94,6,1763032572,"~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx"
--'  94  6  ~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx
-|4,39,94,6,1763032572,"~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx"
--'  94  6  ~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx
-|4,39,94,6,1763032572,"~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx"
--'  94  6  ~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx
-|4,39,94,6,1763032572,"~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx"
--'  94  6  ~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx
-|4,39,94,6,1763032572,"~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx"
--'  94  6  ~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx
-|4,39,94,6,1763032572,"~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx"
--'  94  6  ~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx
-|4,39,94,6,1763032572,"~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx"
--'  94  6  ~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx
-|4,39,94,6,1763032572,"~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx"
--'  94  6  ~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx
-|4,39,94,6,1763032572,"~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx"
--'  94  6  ~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx
-|4,39,94,6,1763032572,"~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx"
--'  94  6  ~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx
-|4,39,94,6,1763032572,"~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx"
--'  94  6  ~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx
-|4,39,94,6,1763032572,"~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx"
--'  94  6  ~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx
-|4,39,94,6,1763032572,"~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx"
--'  94  6  ~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx
-|4,39,94,6,1763032572,"~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx"
--'  94  6  ~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx
-|4,39,94,6,1763032572,"~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx"
--'  94  6  ~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx
-|4,39,94,6,1763032572,"~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx"
--'  94  6  ~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx
-|4,39,94,6,1763032572,"~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx"
--'  94  6  ~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx
-|4,39,94,6,1763032572,"~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx"
--'  94  6  ~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx
-|4,39,94,6,1763032572,"~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx"
--'  94  6  ~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx
-|4,39,94,6,1763032572,"~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx"
--'  94  6  ~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx
-|4,39,94,6,1763032572,"~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx"
--'  94  6  ~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx
-|4,39,94,6,1763032572,"~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx"
--'  94  6  ~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx
-|4,39,94,6,1763032572,"~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx"
--'  94  6  ~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx
-|4,39,94,6,1763032572,"~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx"
--'  94  6  ~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx
-|4,39,94,6,1763032572,"~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx"
--'  94  6  ~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx
-|4,39,94,6,1763032572,"~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx"
--'  94  6  ~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx
-|4,39,94,6,1763032572,"~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx"
--'  94  6  ~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx
-|4,39,94,6,1763032572,"~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx"
--'  94  6  ~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx
-|4,39,94,6,1763032572,"~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx"
--'  94  6  ~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx
-|4,39,94,6,1763032572,"~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx"
--'  94  6  ~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx
-|4,39,94,6,1763032572,"~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx"
--'  94  6  ~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx
-|4,39,94,6,1763032572,"~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx"
--'  94  6  ~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx
-|4,39,94,6,1763032572,"~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx"
--'  94  6  ~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx
-|4,39,94,6,1763032572,"~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx"
--'  94  6  ~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx
-|4,39,94,6,1763032572,"~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx"
--'  94  6  ~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx
-|4,39,94,6,1763032572,"~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx"
--'  94  6  ~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx
-|4,39,94,6,1763032572,"~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx"
--'  94  6  ~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx
-|4,39,94,6,1763032572,"~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx"
--'  94  6  ~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx
-|4,39,94,6,1763032572,"~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx"
--'  94  6  ~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx
-|4,39,94,6,1763032572,"~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx"
--'  94  6  ~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx
-|4,39,94,6,1763032572,"~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx"
--'  94  6  ~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx
-|4,39,94,6,1763032572,"~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx"
--'  94  6  ~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx
-|4,39,94,6,1763032572,"~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx"
--'  94  6  ~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx
-|4,39,94,6,1763032572,"~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx"
--'  428  14  ~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx
-|4,39,428,14,1763032477,"~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx"
--'  428  14  ~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx
-|4,39,428,14,1763032477,"~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx"
--'  428  14  ~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx
-|4,39,428,14,1763032477,"~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx"
--'  428  14  ~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx
-|4,39,428,14,1763032477,"~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx"
--'  428  14  ~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx
-|4,39,428,14,1763032477,"~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx"
--'  428  14  ~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx
-|4,39,428,14,1763032477,"~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx"
--'  428  14  ~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx
-|4,39,428,14,1763032477,"~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx"
--'  428  14  ~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx
-|4,39,428,14,1763032477,"~/frontend/forteai-nexus-frontend/src/components/AdminDashboard.jsx"
+-'  132  8  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,132,8,1763534853,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  132  8  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,132,8,1763534853,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  132  8  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,132,8,1763534853,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
+-'  132  8  ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
+|4,39,132,8,1763534853,"~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx"
 
 # History of marks within files (newest to oldest):
+
+> ~/frontend/forteai-nexus-frontend/src/components/BulkDownloadReports.jsx
+	*	1763635361	0
+	"	79	114
+	^	79	115
+	.	79	12
+	+	79	104
+	+	79	12
 
 > ~/frontend/forteai-nexus-frontend/src/components/ViewReports.jsx
 	*	1763536341	0

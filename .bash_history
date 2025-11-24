@@ -699,3 +699,62 @@ NODE_ENV=production npm run build
 sudo su
 ll
 sudo su
+ll
+cd /home/ec2-user/frontend/forteai-nexus-frontend/src/components/
+grep -rn "Download.*Reset\|download.*reset" AdminDashboard.jsx
+ll
+grep -rn "Download.*Reset All\|Download & Reset" AdminDashboard.jsx
+grep -rn "downloadReset\|handleDownload.*Reset" AdminDashboard.jsx
+grep -rn "download/all-reports\|download-reset" AdminDashboard.jsx
+grep -rn "Download.*Reset All" src/
+cd ..
+grep -rn "Download.*Reset All" src/
+cd ..
+grep -rn "Download.*Reset All" src/
+grep -A10 "Download & Reset All" AdminDashboard.jsx
+cd src/
+cd components/
+grep -A10 "Download & Reset All" AdminDashboard.jsx
+grep -B20 -A30 "Download & Reset All" BulkDownloadReports.jsx
+sed -n '130,200p' BulkDownloadReports.jsx
+grep -B50 "downloadAndReset" BulkDownloadReports.jsx | head -70
+sed -n '1,130p' BulkDownloadReports.jsx
+sed -i '60s/fetch`/fetch(`/' BulkDownloadReports.jsx
+sed -i '91s/console.log`/console.log(`/' BulkDownloadReports.jsx
+sed -i '97s/console.error`/console.error(`/' BulkDownloadReports.jsx
+echo "=== Line 60 ==="
+sed -n '60p' BulkDownloadReports.jsx
+echo "=== Line 91 ==="
+sed -n '91p' BulkDownloadReports.jsx
+echo "=== Line 97 ==="
+sed -n '97p' BulkDownloadReports.jsx
+vim BulkDownloadReports.jsx
+cd /home/ec2-user/frontend/forteai-nexus-frontend/
+rm -rf dist/ node_modules/.vite
+sudo su
+ll
+cd frontend/
+cd forteai-nexus-frontend/
+ll
+cd src/
+cd components/
+vim BulkDownloadReports.jsx 
+grep -n "master_reports" BulkDownloadReports.jsx
+vim BulkDownloadReports.jsx 
+cd /home/ec2-user/frontend/forteai-nexus-frontend/
+NODE_ENV=production npm run build
+sudo su
+ls
+cd ..
+exit
+ll
+cd /home/ec2-user/frontend/forteai-nexus-frontend/src/components/
+grep -rn "Add New Employee" .
+grep -n "fetch.*add\|fetch.*employee" HRDashboard.jsx | head -20
+grep -n "method.*POST\|POST.*method" HRDashboard.jsx
+sed -n '60,75p' HRDashboard.jsx
+sed -n '88,105p' HRDashboard.jsx
+cd .
+cd ..
+grep -c "nexus-backend.forteai.in" /var/www/frontend/assets/index-*.js
+sudo su

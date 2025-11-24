@@ -1,0 +1,25 @@
+0 verbose cli /usr/bin/node /usr/bin/npm
+1 info using npm@10.8.2
+2 info using node@v20.19.5
+3 silly config load:file:/usr/lib/node_modules/npm/npmrc
+4 silly config load:file:/home/ec2-user/frontend/forteai-nexus-frontend/.npmrc
+5 silly config load:file:/home/ec2-user/.npmrc
+6 silly config load:file:/usr/etc/npmrc
+7 verbose title npm run build
+8 verbose argv "run" "build"
+9 verbose logfile logs-max:10 dir:/home/ec2-user/.npm/_logs/2025-11-20T10_43_23_914Z-
+10 verbose logfile /home/ec2-user/.npm/_logs/2025-11-20T10_43_23_914Z-debug-0.log
+11 silly logfile start cleaning logs, removing 1 files
+12 silly logfile done cleaning log files
+13 http fetch GET 200 https://registry.npmjs.org/npm 126ms
+14 verbose cwd /home/ec2-user/frontend/forteai-nexus-frontend
+15 verbose os Linux 6.1.153-175.280.amzn2023.x86_64
+16 verbose node v20.19.5
+17 verbose npm  v10.8.2
+18 notice
+18 notice New [31mmajor[39m version of npm available! [31m10.8.2[39m -> [34m11.6.3[39m
+18 notice Changelog: [34mhttps://github.com/npm/cli/releases/tag/v11.6.3[39m
+18 notice To update run: [4mnpm install -g npm@11.6.3[24m
+18 notice  { force: true, [Symbol(proc-log.meta)]: true }
+19 verbose exit 1
+20 verbose code 1

@@ -247,8 +247,8 @@ const ViewReports = ({ token, onOpenAdd, onOpenImport, user }) => {
                       try {
                         setLoading(true);
                         setError('');
-                        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/reports/regenerate/${selectedEmployee.id}`, {
-				method: 'POST',
+                        const response = await fetch(`/api/reports/regenerate/${selectedEmployee.id}`), {
+                          method: 'POST',
                           headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }
                         });
                         const result = await response.json();
@@ -377,7 +377,7 @@ const ViewReports = ({ token, onOpenAdd, onOpenImport, user }) => {
                     <button className="action-button primary" onClick={async () => {
                       setResetEmployee(null);
                       try {
-                        const resp = await fetch(`${import.meta.env.VITE_API_BASE_URL}/hr/employee/${selectedEmployee.id}/responses`, {
+                        const resp = await fetch(`/api/hr/employee/${selectedEmployee.id}/responses`, {
                           method: 'DELETE',
                           headers: { 'Authorization': `Bearer ${token}` }
                         });
@@ -607,7 +607,7 @@ const ViewReports = ({ token, onOpenAdd, onOpenImport, user }) => {
                     <button className="action-button secondary" onClick={() => { setShowResetConfirm(false); setResetEmployee(null); }}>Cancel</button>
                     <button className="action-button primary" onClick={async () => {
                       try {
-                        const resp = await fetch(`${import.meta.env.VITE_API_BASE_URL}/hr/employee/${resetEmployee.employeesID}/responses`, {
+                        const resp = await fetch(`/api/hr/employee/${resetEmployee.employeesID}/responses`, {
                           method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` }
                         });
                         if (resp.ok) {
@@ -645,8 +645,7 @@ const ViewReports = ({ token, onOpenAdd, onOpenImport, user }) => {
                       setLoading(true);
                       setError('');
 
-                      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/reports/regenerate/${selectedEmployee.id}`, {
-
+                      const response = await fetch(`/api/reports/regenerate/${selectedEmployee.id}`), {
                         method: 'POST',
                         headers: {
                           'Content-Type': 'application/json',

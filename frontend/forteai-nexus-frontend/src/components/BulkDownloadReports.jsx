@@ -28,7 +28,7 @@ const BulkDownloadReports = ({ token }) => {
       // Download master ZIP file with all companies
       console.log('Downloading master ZIP file...');
       const downloadRes = await fetch(
-        `/api/admin/download/all-reports`,
+        `${import.meta.env.VITE_API_BASE_URL}/admin/download/all-reports`,
         { headers: { Authorization: token ? `Bearer ${token}` : "" } }
       );
 
@@ -76,7 +76,7 @@ const BulkDownloadReports = ({ token }) => {
         
         try {
           const resetRes = await fetch(
-            `/api/admin/company/${encodeURIComponent(name)}/reset?onlyFilled=true`,
+            `${import.meta.env.VITE_API_BASE_URL}/admin/company/${encodeURIComponent(name)}/reset?onlyFilled=true`,
             {
               method: 'POST',
               headers: { Authorization: token ? `Bearer ${token}` : "" }
