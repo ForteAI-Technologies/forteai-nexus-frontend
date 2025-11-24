@@ -758,3 +758,5 @@ cd .
 cd ..
 grep -c "nexus-backend.forteai.in" /var/www/frontend/assets/index-*.js
 sudo su
+ll
+sudo su
