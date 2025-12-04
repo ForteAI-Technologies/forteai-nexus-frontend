@@ -1,0 +1,237 @@
+/* Ensure form text is dark */
+.sentiment-form-container {
+  color: #1f2937;
+}
+
+/* Moved SentimentForm styles here for reuse across forms */
+.sentiment-form-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.sentiment-form-content {
+  width: 100%;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .sentiment-form-container {
+    padding: 80px 10px 20px;
+    max-width: 100%;
+  }
+  
+  /* Ensure proper spacing on mobile */
+  .sentiment-form-content {
+    margin-left: 0;
+    padding-left: 0;
+  }
+  
+  /* Adjust question text size for mobile */
+  .question-text {
+    font-size: 18px !important;
+    line-height: 1.5 !important;
+  }
+  
+  /* Make buttons full width on mobile */
+  .mobile-nav-buttons {
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+  }
+  
+  .mobile-nav-buttons button {
+    width: 100%;
+    min-height: 48px;
+  }
+  
+  /* Hide the dots navigation on small screens */
+  .mobile-nav-buttons > div:nth-child(2) {
+    display: none;
+  }
+}
+
+/* Animated success icon styles (ripple -> badge -> rotating scallops -> check draw) */
+.anim-icon { display: inline-block; }
+.anim-icon .badge-group { opacity: 0; transform-origin: 60px 60px; transform: scale(0.9); animation: badgeAnim 2.8s ease-in-out infinite; }
+.anim-icon .badge-inner { transform-origin: 60px 60px; }
+.anim-icon .check { stroke-dasharray: 64; stroke-dashoffset: 64; opacity: 0; animation: checkDraw 2.8s linear infinite; stroke-linejoin: round; }
+
+@keyframes badgeAnim {
+  0% { opacity: 0; transform: scale(0.9); }
+  45% { opacity: 0; transform: scale(0.95); }
+  55% { opacity: 1; transform: scale(1.04); }
+  70% { opacity: 1; transform: scale(1); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes scallopRotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes checkDraw {
+  0% { stroke-dashoffset: 64; opacity: 0; }
+  50% { stroke-dashoffset: 64; opacity: 0; }
+  60% { opacity: 1; }
+  75% { stroke-dashoffset: 20; }
+  90% { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: 0; opacity: 1; }
+}
+
+.anim-icon .badge-inner { animation: badgePulse 2.8s ease-in-out infinite; }
+
+@keyframes badgePulse {
+  0% { transform: scale(0.8); }
+  50% { transform: scale(1.02); }
+  100% { transform: scale(0.98); }
+}
+
+/* Progress bar header */
+.progress-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.progress-bar {
+  flex-grow: 1;
+  background-color: #E5E7EB;
+  height: 6px;
+  border-radius: 3px;
+  overflow: hidden;
+}
+.progress-fill {
+  background-color: #34D399;
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+/* Question card styling */
+.question-card {
+  background-color: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+  padding: 24px;
+  margin-bottom: 16px;
+}
+.question-card .question-text {
+  display: block;
+  margin-bottom: 12px;
+  font-size: 16px;
+  color: #1F2937;
+}
+
+/* Options list */
+.option-list {
+  margin-top: 12px;
+}
+.option-item {
+  display: flex;
+  align-items: center;
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 12px;
+  cursor: pointer;
+}
+.option-item input[type="radio"] {
+  margin-right: 12px;
+}
+.option-item span {
+  color: #1F2937;
+}
+
+/* Inputs and textarea */
+input[type="number"],
+textarea {
+  width: 100%;
+  background-color: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+  padding: 12px;
+  margin-top: 8px;
+  margin-bottom: 12px;
+  color: #1F2937;
+}
+
+/* Form actions and buttons */
+.form-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+.action-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 24px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid #D1D5DB;
+  background-color: #FFFFFF;
+  color: #1F2937;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+.action-button.primary {
+  background-color: #6366F1;
+  color: #FFFFFF;
+  border: none;
+}
+.action-button:hover {
+  background-color: #E5E7EB;
+}
+.action-button.primary:hover {
+  background-color: #4F46E5;
+}
+
+/* Slider for amount question */
+.slider-container {
+  position: relative;
+  margin-top: 12px;
+  margin-bottom: 16px;
+}
+.slider {
+  width: 100%;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  background: #E5E7EB;
+  border-radius: 3px;
+  outline: none;
+}
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  background: #6366F1;
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+}
+.slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  background: #6366F1;
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+}
+.slider-values {
+  display: flex;
+  justify-content: space-between; /* works with two labels */
+  font-size: 14px;
+  color: #6B7280;
+  margin-top: 4px;
+}
+.slider-current {
+  position: absolute;
+  top: -24px;
+  right: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1F2937;
+}

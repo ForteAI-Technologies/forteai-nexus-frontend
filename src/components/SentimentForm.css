@@ -1,0 +1,305 @@
+.sentiment-form-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.sentiment-form-content {
+  width: 100%;
+}
+
+/* Mobile-First Responsive Design */
+@media (max-width: 1024px) {
+  .sentiment-form-container {
+    max-width: 90%;
+    padding: 0 15px;
+  }
+}
+
+@media (max-width: 768px) {
+  .sentiment-form-container {
+    padding: 80px 15px 20px;
+    max-width: 100%;
+    margin: 0;
+  }
+  
+  .sentiment-form-content {
+    margin-left: 0;
+    padding: 0;
+    width: 100%;
+  }
+  
+  /* Enhanced question styling */
+  .question-container {
+    padding: 20px 15px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+  }
+  
+  .question-text {
+    font-size: 1.1rem !important;
+    line-height: 1.6 !important;
+    color: #2d3748;
+    font-weight: 500;
+    margin-bottom: 15px;
+  }
+  
+  .helper-text {
+    font-size: 0.9rem;
+    color: #718096;
+    margin-bottom: 20px;
+    line-height: 1.5;
+  }
+  
+  /* Form controls */
+  .form-input,
+  .form-textarea {
+    width: 100%;
+    padding: 12px 16px;
+    font-size: 16px; /* Prevents zoom on iOS */
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    background: white;
+    transition: all 0.3s ease;
+  }
+  
+  .form-input:focus,
+  .form-textarea:focus {
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+    outline: none;
+  }
+  
+  .form-textarea {
+    min-height: 120px;
+    resize: vertical;
+  }
+  
+  /* Multiple choice options */
+  .option-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .option-item {
+    padding: 12px 16px;
+    background: white;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .option-item:hover {
+    border-color: #c7d2fe;
+    background: #f8fafc;
+  }
+  
+  .option-item.selected {
+    border-color: #4f46e5;
+    background: #eef2ff;
+    color: #4338ca;
+  }
+  
+  /* Navigation buttons */
+  .mobile-nav-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    margin-top: 25px;
+  }
+  
+  .mobile-nav-buttons button {
+    width: 100%;
+    min-height: 50px;
+    padding: 14px 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    touch-action: manipulation;
+  }
+  
+  .btn-primary {
+    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+    color: white;
+  }
+  
+  .btn-primary:active {
+    transform: scale(0.98);
+  }
+  
+  .btn-secondary {
+    background: #f8fafc;
+    color: #4a5568;
+    border: 2px solid #e2e8f0;
+  }
+  
+  .btn-secondary:active {
+    background: #edf2f7;
+    transform: scale(0.98);
+  }
+  
+  /* Progress indicator */
+  .progress-indicator {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+    gap: 8px;
+  }
+  
+  .progress-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #e2e8f0;
+    transition: all 0.3s ease;
+  }
+  
+  .progress-dot.active {
+    background: #4f46e5;
+    transform: scale(1.2);
+  }
+  
+  /* Hide dots navigation on very small screens */
+  @media (max-width: 480px) {
+    .progress-indicator {
+      display: none;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .sentiment-form-container {
+    padding: 70px 10px 15px;
+  }
+  
+  .question-container {
+    padding: 15px 12px;
+    margin-bottom: 15px;
+  }
+  
+  .question-text {
+    font-size: 1rem !important;
+    line-height: 1.5 !important;
+  }
+  
+  .helper-text {
+    font-size: 0.85rem;
+  }
+  
+  .form-input,
+  .form-textarea {
+    padding: 10px 12px;
+    font-size: 16px;
+  }
+  
+  .form-textarea {
+    min-height: 100px;
+  }
+  
+  .option-item {
+    padding: 10px 12px;
+    font-size: 0.9rem;
+  }
+  
+  /* Make nav buttons more prominent and touch-friendly on mobile */
+  .mobile-nav-buttons button {
+    min-height: 52px;
+    padding: 0 0;
+    font-size: 1.08rem;
+    width: 100%;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    box-shadow: 0 4px 16px rgba(79,70,229,0.10), 0 1.5px 4px rgba(0,0,0,0.04);
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    transition: box-shadow 0.18s, transform 0.12s;
+    background: linear-gradient(135deg,#4f46e5,#7c3aed);
+    color: #fff;
+    border: none;
+  }
+  .mobile-nav-buttons button:active {
+    transform: scale(0.97);
+    box-shadow: 0 2px 8px rgba(79,70,229,0.13);
+  }
+  .mobile-nav-buttons button[disabled] {
+    background: #f3f4f6 !important;
+    color: #9ca3af !important;
+    box-shadow: none !important;
+    cursor: not-allowed;
+  }
+}
+
+@media (max-width: 360px) {
+  .sentiment-form-container {
+    padding: 60px 8px 12px;
+  }
+  
+  .question-container {
+    padding: 12px 10px;
+  }
+  
+  .question-text {
+    font-size: 0.95rem !important;
+  }
+  
+  .option-item {
+    padding: 8px 10px;
+    font-size: 0.85rem;
+  }
+  
+  .mobile-nav-buttons button {
+    min-height: 42px;
+    font-size: 0.9rem;
+  }
+}
+
+/* Animated success icon styles (ripple -> badge -> rotating scallops -> check draw) */
+.anim-icon { display: inline-block; }
+.anim-icon .badge-group { opacity: 0; transform-origin: 60px 60px; transform: scale(0.9); animation: badgeAnim 2.8s ease-in-out infinite; }
+.anim-icon .badge-inner { transform-origin: 60px 60px; }
+.anim-icon .check { stroke-dasharray: 64; stroke-dashoffset: 64; opacity: 0; animation: checkDraw 2.8s linear infinite; stroke-linejoin: round; }
+
+/* ripple removed */
+
+@keyframes badgeAnim {
+  0% { opacity: 0; transform: scale(0.9); }
+  45% { opacity: 0; transform: scale(0.95); }
+  55% { opacity: 1; transform: scale(1.04); }
+  70% { opacity: 1; transform: scale(1); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes scallopRotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes checkDraw {
+  0% { stroke-dashoffset: 64; opacity: 0; }
+  50% { stroke-dashoffset: 64; opacity: 0; }
+  60% { opacity: 1; }
+  75% { stroke-dashoffset: 20; }
+  90% { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: 0; opacity: 1; }
+}
+
+.anim-icon .badge-inner { animation: badgePulse 2.8s ease-in-out infinite; }
+
+@keyframes badgePulse {
+  0% { transform: scale(0.8); }
+  50% { transform: scale(1.02); }
+  100% { transform: scale(0.98); }
+}

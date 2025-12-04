@@ -1,0 +1,122 @@
+name: Frontend Deployment Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1️⃣ Checkout code
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # 2️⃣ Setup Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      # 3️⃣ Setup Environment
+      - name: Setup Environment
+        run: |
+          echo "🔐 Creating .env.production..."
+          echo "VITE_API_BASE_URL=https://nexus-backend.forteai.in/api" > .env.production
+          echo "✅ Created .env.production"
+          cat .env.production
+
+       # 4️⃣ Install dependencies and build
+      - name: Install Dependencies & Build
+        working-directory: frontend/forteai-nexus-frontend
+        run: |
+          echo "📦 Installing dependencies..."
+          rm -rf node_modules dist node_modules/.vite
+          npm install --legacy-peer-deps
+          
+          echo "🏗️ Building production bundle..."
+          npm run build
+          
+          echo "✅ Build completed"
+
+      # 5️⃣ Verify build
+      - name: Verify Build Output
+        working-directory: frontend/forteai-nexus-frontend
+        run: |
+          echo "📂 Build directory contents:"
+          ls -la dist
+      # 6️⃣ Install sshpass
+      - name: Install sshpass
+        run: sudo apt-get update && sudo apt-get install -y sshpass
+
+        # 7️⃣ Deploy to EC2 via Bastion
+      - name: Deploy to EC2 via Bastion
+        working-directory: frontend/forteai-nexus-frontend
+        run: |
+          echo "📦 Creating deployment tarball..."
+          tar -czf deploy.tar.gz dist
+          
+          echo "📤 Copying tarball to Bastion..."
+          sshpass -p 'forteai@123' scp -o StrictHostKeyChecking=no deploy.tar.gz ec2-user@13.204.190.46:/tmp/
+          
+          echo "🚀 Deploying to Frontend Server..."
+          sshpass -p 'forteai@123' ssh -o StrictHostKeyChecking=no ec2-user@13.204.190.46 "
+            # Copy to frontend server
+            sshpass -p 'forteai@1234' scp -o StrictHostKeyChecking=no /tmp/deploy.tar.gz ec2-user@10.0.143.197:/tmp/
+            
+            # Extract and deploy
+            sshpass -p 'forteai@1234' ssh -o StrictHostKeyChecking=no ec2-user@10.0.143.197 '
+              echo \"🧹 Preparing deployment directory...\"
+              sudo mkdir -p /home/ec2-user/frontend/forteai-nexus-frontend
+              sudo chown -R ec2-user:ec2-user /home/ec2-user/frontend
+              
+              echo \"📦 Extracting files...\"
+              cd /home/ec2-user/frontend/forteai-nexus-frontend
+              tar -xzf /tmp/deploy.tar.gz
+              rm -f /tmp/deploy.tar.gz
+              
+              echo \"✅ Files extracted successfully\"
+              ls -la dist/
+            '
+          "
+
+      # 8️⃣ Deploy build to Nginx directory
+      - name: Deploy to Nginx Directory
+        run: |
+          echo "📂 Deploying to Nginx..."
+          sshpass -p 'forteai@123' ssh -o StrictHostKeyChecking=no ec2-user@13.204.190.46 "
+            sshpass -p 'forteai@1234' ssh -o StrictHostKeyChecking=no ec2-user@10.0.143.197 '
+              echo \"🧹 Cleaning Nginx directory...\"
+              sudo rm -rf /usr/share/nginx/html/*
+              
+              echo \"📋 Copying build files...\"
+              sudo cp -r /home/ec2-user/frontend/forteai-nexus-frontend/dist/* /usr/share/nginx/html/
+              
+              echo \"🔐 Setting permissions...\"
+              sudo chown -R nginx:nginx /usr/share/nginx/html
+              sudo chmod -R 755 /usr/share/nginx/html
+              
+              echo \"✅ Frontend deployed to Nginx\"
+            '
+          "
+
+      # 9️⃣ Restart Nginx
+      - name: Restart Nginx
+        run: |
+          echo "🔄 Restarting Nginx..."
+          sshpass -p 'forteai@123' ssh -o StrictHostKeyChecking=no ec2-user@13.204.190.46 "
+            sshpass -p 'forteai@1234' ssh -o StrictHostKeyChecking=no ec2-user@10.0.143.197 '
+              sudo systemctl restart nginx
+              sudo systemctl status nginx --no-pager
+              echo \"✅ Nginx restarted successfully!\"
+            '
+          "
+
+      # 🔟 Verify Deployment
+      - name: Verify Deployment
+        run: |
+          echo "✅ Deployment completed successfully!"
+          echo "🔗 Frontend URL: https://nexus-poc.forteai.in"
