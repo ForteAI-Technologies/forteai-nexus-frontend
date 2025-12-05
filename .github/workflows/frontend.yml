@@ -1,4 +1,4 @@
-name: Frontend Deployment Pipeline
+name: Frontend Deployment
 
 on:
   push:
@@ -9,114 +9,124 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
+    
     steps:
-      # 1️⃣ Checkout code
-      - name: Checkout Code
+      - name: Checkout Repository
         uses: actions/checkout@v3
 
-      # 2️⃣ Setup Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
 
-      # 3️⃣ Setup Environment
-      - name: Setup Environment
+      - name: Install rsync
+        run: sudo apt-get update && sudo apt-get install -y rsync
+
+      - name: Create Environment File
         run: |
-          echo "🔐 Creating .env.production..."
           echo "VITE_API_BASE_URL=https://nexus-backend.forteai.in/api" > .env.production
-          echo "✅ Created .env.production"
           cat .env.production
 
-       # 4️⃣ Install dependencies and build
-      - name: Install Dependencies & Build
-        working-directory: frontend/forteai-nexus-frontend
+      - name: Build Production Bundle
         run: |
-          echo "📦 Installing dependencies..."
           rm -rf node_modules dist node_modules/.vite
           npm install --legacy-peer-deps
-          
-          echo "🏗️ Building production bundle..."
           npm run build
-          
-          echo "✅ Build completed"
+          ls -la dist/
 
-      # 5️⃣ Verify build
-      - name: Verify Build Output
-        working-directory: frontend/forteai-nexus-frontend
+      - name: Setup SSH Key for Bastion
         run: |
-          echo "📂 Build directory contents:"
-          ls -la dist
-      # 6️⃣ Install sshpass
-      - name: Install sshpass
-        run: sudo apt-get update && sudo apt-get install -y sshpass
+          mkdir -p ~/.ssh
+          cat > ~/.ssh/cicd_key << 'EOF'
+-----BEGIN OPENSSH PRIVATE KEY-----
+b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW
+QyNTUxOQAAACDT4MGu3x3l3HUTX7mYBFUQI32OR8VFw65zGj68QlCWoQAAAJjUTC5u1Ewu
+bgAAAAtzc2gtZWQyNTUxOQAAACDT4MGu3x3l3HUTX7mYBFUQI32OR8VFw65zGj68QlCWoQ
+AAAED59OCsItR17D6d8vMxr+BtJ7u/W7/SmRKu3uh1ZiY2a9Pgwa7fHeXcdRNfuZgEVRAj
+fY5HxUXDrnMaPrxCUJahAAAAD2NpY2QtZGVwbG95bWVudAECAwQFBg==
+-----END OPENSSH PRIVATE KEY-----
+EOF
+          chmod 600 ~/.ssh/cicd_key
+          ssh-keyscan 13.204.190.46 >> ~/.ssh/known_hosts 2>/dev/null
 
-        # 7️⃣ Deploy to EC2 via Bastion
-      - name: Deploy to EC2 via Bastion
-        working-directory: frontend/forteai-nexus-frontend
+      - name: Prepare Bastion Directory
         run: |
-          echo "📦 Creating deployment tarball..."
-          tar -czf deploy.tar.gz dist
-          
-          echo "📤 Copying tarball to Bastion..."
-          sshpass -p 'forteai@123' scp -o StrictHostKeyChecking=no deploy.tar.gz ec2-user@13.204.190.46:/tmp/
-          
-          echo "🚀 Deploying to Frontend Server..."
-          sshpass -p 'forteai@123' ssh -o StrictHostKeyChecking=no ec2-user@13.204.190.46 "
-            # Copy to frontend server
-            sshpass -p 'forteai@1234' scp -o StrictHostKeyChecking=no /tmp/deploy.tar.gz ec2-user@10.0.143.197:/tmp/
-            
-            # Extract and deploy
-            sshpass -p 'forteai@1234' ssh -o StrictHostKeyChecking=no ec2-user@10.0.143.197 '
-              echo \"🧹 Preparing deployment directory...\"
-              sudo mkdir -p /home/ec2-user/frontend/forteai-nexus-frontend
-              sudo chown -R ec2-user:ec2-user /home/ec2-user/frontend
-              
-              echo \"📦 Extracting files...\"
-              cd /home/ec2-user/frontend/forteai-nexus-frontend
-              tar -xzf /tmp/deploy.tar.gz
-              rm -f /tmp/deploy.tar.gz
-              
-              echo \"✅ Files extracted successfully\"
-              ls -la dist/
+          ssh -i ~/.ssh/cicd_key -o StrictHostKeyChecking=no ec2-user@13.204.190.46 "mkdir -p /tmp/frontend-deploy && rm -rf /tmp/frontend-deploy/*"
+
+      - name: Copy Build to Bastion
+        run: |
+          rsync -avz -e 'ssh -i ~/.ssh/cicd_key -o StrictHostKeyChecking=no' dist/ ec2-user@13.204.190.46:/tmp/frontend-deploy/
+
+      - name: Backup Current Frontend
+        run: |
+          ssh -i ~/.ssh/cicd_key -o StrictHostKeyChecking=no ec2-user@13.204.190.46 "
+            ssh -i ~/.ssh/frontend_deploy_key -o StrictHostKeyChecking=no ec2-user@10.0.143.197 '
+              if [ -d /usr/share/nginx/html ] && [ -n \"\$(ls -A /usr/share/nginx/html 2>/dev/null)\" ]; then
+                BACKUP_DIR=\"/home/ec2-user/frontend-backups/backup-\$(date +%Y%m%d_%H%M%S)\"
+                mkdir -p \"\$BACKUP_DIR\"
+                sudo cp -r /usr/share/nginx/html/* \"\$BACKUP_DIR/\" 2>/dev/null || true
+                cd /home/ec2-user/frontend-backups && ls -t | tail -n +6 | xargs -r sudo rm -rf
+              fi
             '
           "
 
-      # 8️⃣ Deploy build to Nginx directory
-      - name: Deploy to Nginx Directory
+      - name: Deploy to Frontend Server
         run: |
-          echo "📂 Deploying to Nginx..."
-          sshpass -p 'forteai@123' ssh -o StrictHostKeyChecking=no ec2-user@13.204.190.46 "
-            sshpass -p 'forteai@1234' ssh -o StrictHostKeyChecking=no ec2-user@10.0.143.197 '
-              echo \"🧹 Cleaning Nginx directory...\"
-              sudo rm -rf /usr/share/nginx/html/*
-              
-              echo \"📋 Copying build files...\"
-              sudo cp -r /home/ec2-user/frontend/forteai-nexus-frontend/dist/* /usr/share/nginx/html/
-              
-              echo \"🔐 Setting permissions...\"
+          ssh -i ~/.ssh/cicd_key -o StrictHostKeyChecking=no ec2-user@13.204.190.46 "
+            ssh -i ~/.ssh/frontend_deploy_key -o StrictHostKeyChecking=no ec2-user@10.0.143.197 'sudo rm -rf /usr/share/nginx/html/*'
+            
+            rsync -avz -e 'ssh -i ~/.ssh/frontend_deploy_key -o StrictHostKeyChecking=no' /tmp/frontend-deploy/ ec2-user@10.0.143.197:/tmp/frontend-new/
+            
+            ssh -i ~/.ssh/frontend_deploy_key -o StrictHostKeyChecking=no ec2-user@10.0.143.197 '
+              sudo cp -r /tmp/frontend-new/* /usr/share/nginx/html/
               sudo chown -R nginx:nginx /usr/share/nginx/html
               sudo chmod -R 755 /usr/share/nginx/html
-              
-              echo \"✅ Frontend deployed to Nginx\"
+              rm -rf /tmp/frontend-new
             '
           "
 
-      # 9️⃣ Restart Nginx
+      - name: Verify Nginx Configuration
+        run: |
+          ssh -i ~/.ssh/cicd_key -o StrictHostKeyChecking=no ec2-user@13.204.190.46 "
+            ssh -i ~/.ssh/frontend_deploy_key -o StrictHostKeyChecking=no ec2-user@10.0.143.197 '
+              sudo nginx -t
+            '
+          "
+
       - name: Restart Nginx
         run: |
-          echo "🔄 Restarting Nginx..."
-          sshpass -p 'forteai@123' ssh -o StrictHostKeyChecking=no ec2-user@13.204.190.46 "
-            sshpass -p 'forteai@1234' ssh -o StrictHostKeyChecking=no ec2-user@10.0.143.197 '
+          ssh -i ~/.ssh/cicd_key -o StrictHostKeyChecking=no ec2-user@13.204.190.46 "
+            ssh -i ~/.ssh/frontend_deploy_key -o StrictHostKeyChecking=no ec2-user@10.0.143.197 '
               sudo systemctl restart nginx
-              sudo systemctl status nginx --no-pager
-              echo \"✅ Nginx restarted successfully!\"
+              sleep 3
+              if sudo systemctl is-active --quiet nginx; then
+                echo \"Nginx running successfully\"
+              else
+                echo \"Nginx failed to start\"
+                exit 1
+              fi
             '
           "
 
-      # 🔟 Verify Deployment
       - name: Verify Deployment
         run: |
-          echo "✅ Deployment completed successfully!"
-          echo "🔗 Frontend URL: https://nexus-poc.forteai.in"
+          ssh -i ~/.ssh/cicd_key -o StrictHostKeyChecking=no ec2-user@13.204.190.46 "
+            ssh -i ~/.ssh/frontend_deploy_key -o StrictHostKeyChecking=no ec2-user@10.0.143.197 '
+              if [ -f /usr/share/nginx/html/index.html ]; then
+                echo \"index.html exists\"
+              else
+                echo \"index.html NOT FOUND\"
+                exit 1
+              fi
+              
+              if [ -f /usr/share/nginx/html/sample_import.csv ]; then
+                echo \"sample_import.csv deployed\"
+              fi
+            '
+          "
+
+      - name: Deployment Summary
+        if: always()
+        run: |
+          echo "Frontend deployment completed"
+          echo "URL: https://nexus-poc.forteai.in"
