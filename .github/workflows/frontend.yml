@@ -11,44 +11,36 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      # Step 1: Get code from GitHub repository
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      # Step 2: Setup Node.js environment for building
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
 
-      # Step 3: Install required deployment tools
       - name: Install rsync
         run: sudo apt-get update && sudo apt-get install -y rsync
 
-      # Step 4: Create production environment file with backend URL
       - name: Create Environment File
-        working-directory: frontend/forteai-nexus-frontend
         run: |
           echo "VITE_API_BASE_URL=https://nexus-backend.forteai.in/api" > .env.production
           cat .env.production
 
-      # Step 5: Install npm dependencies and build production bundle
       - name: Build Production Bundle
-        working-directory: frontend/forteai-nexus-frontend
         run: |
           rm -rf node_modules dist node_modules/.vite
           npm install --legacy-peer-deps
           npm run build
           ls -la dist/
 
-      # Step 6: Setup SSH key to connect to bastion server
       - name: Setup SSH Key for Bastion
         run: |
           mkdir -p ~/.ssh
           cat > ~/.ssh/cicd_key << 'EOF'
           -----BEGIN OPENSSH PRIVATE KEY-----
           b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW
-          QyNTUxOQAAACDT4MGu3x3l3HUTX7mYBFUQI32OR8VFw65zGj68QlCWoQAAAJjUTC5u1Ewu
+          QyNTUxOQAAACDT4MGu3x3l3HUTX7mYBFuQI32OR8VFw65zGj68QlCWoQAAAJjUTC5u1Ewu
           bgAAAAtzc2gtZWQyNTUxOQAAACDT4MGu3x3l3HUTX7mYBFUQI32OR8VFw65zGj68QlCWoQ
           AAAED59OCsItR17D6d8vMxr+BtJ7u/W7/SmRKu3uh1ZiY2a9Pgwa7fHeXcdRNfuZgEVRAj
           fY5HxUXDrnMaPrxCUJahAAAAD2NpY2QtZGVwbG95bWVudAECAwQFBg==
@@ -57,17 +49,14 @@ jobs:
           chmod 600 ~/.ssh/cicd_key
           ssh-keyscan 13.204.190.46 >> ~/.ssh/known_hosts 2>/dev/null
 
-      # Step 7: Prepare temporary deployment directory on bastion
       - name: Prepare Bastion Directory
         run: |
           ssh -i ~/.ssh/cicd_key -o StrictHostKeyChecking=no ec2-user@13.204.190.46 "mkdir -p /tmp/frontend-deploy && rm -rf /tmp/frontend-deploy/*"
 
-      # Step 8: Copy built frontend files to bastion server
       - name: Copy Build to Bastion
         run: |
-          rsync -avz -e 'ssh -i ~/.ssh/cicd_key -o StrictHostKeyChecking=no' frontend/forteai-nexus-frontend/dist/ ec2-user@13.204.190.46:/tmp/frontend-deploy/
+          rsync -avz -e 'ssh -i ~/.ssh/cicd_key -o StrictHostKeyChecking=no' dist/ ec2-user@13.204.190.46:/tmp/frontend-deploy/
 
-      # Step 9: Backup current frontend before deploying new version
       - name: Backup Current Frontend
         run: |
           ssh -i ~/.ssh/cicd_key -o StrictHostKeyChecking=no ec2-user@13.204.190.46 "
@@ -81,7 +70,6 @@ jobs:
             '
           "
 
-      # Step 10: Deploy new frontend files to Nginx directory
       - name: Deploy to Frontend Server
         run: |
           ssh -i ~/.ssh/cicd_key -o StrictHostKeyChecking=no ec2-user@13.204.190.46 "
@@ -97,7 +85,6 @@ jobs:
             '
           "
 
-      # Step 11: Verify Nginx configuration is valid
       - name: Verify Nginx Configuration
         run: |
           ssh -i ~/.ssh/cicd_key -o StrictHostKeyChecking=no ec2-user@13.204.190.46 "
@@ -112,7 +99,6 @@ jobs:
             '
           "
 
-      # Step 12: Restart Nginx to serve new frontend
       - name: Restart Nginx
         run: |
           ssh -i ~/.ssh/cicd_key -o StrictHostKeyChecking=no ec2-user@13.204.190.46 "
@@ -128,7 +114,6 @@ jobs:
             '
           "
 
-      # Step 13: Verify deployment was successful
       - name: Verify Deployment
         run: |
           ssh -i ~/.ssh/cicd_key -o StrictHostKeyChecking=no ec2-user@13.204.190.46 "
@@ -161,7 +146,6 @@ jobs:
             '
           "
 
-      # Step 14: Display deployment summary
       - name: Deployment Summary
         if: always()
         run: |
