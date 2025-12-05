@@ -11,48 +11,63 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
+      # Step 1: Get code from GitHub repository
       - name: Checkout Repository
         uses: actions/checkout@v3
 
+      # Step 2: Setup Node.js environment for building
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
 
+      # Step 3: Install required deployment tools
       - name: Install rsync
         run: sudo apt-get update && sudo apt-get install -y rsync
 
+      # Step 4: Create production environment file with backend URL
       - name: Create Environment File
+        working-directory: frontend/forteai-nexus-frontend
         run: |
           echo "VITE_API_BASE_URL=https://nexus-backend.forteai.in/api" > .env.production
+          cat .env.production
 
+      # Step 5: Install npm dependencies and build production bundle
       - name: Build Production Bundle
+        working-directory: frontend/forteai-nexus-frontend
         run: |
-          rm -rf node_modules dist
+          rm -rf node_modules dist node_modules/.vite
           npm install --legacy-peer-deps
           npm run build
+          ls -la dist/
 
+      # Step 6: Setup SSH key to connect to bastion server
       - name: Setup SSH Key for Bastion
         run: |
           mkdir -p ~/.ssh
-          echo "-----BEGIN OPENSSH PRIVATE KEY-----" > ~/.ssh/cicd_key
-          echo "b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW" >> ~/.ssh/cicd_key
-          echo "QyNTUxOQAAACDT4MGu3x3l3HUTX7mYBFuQI32OR8VFw65zGj68QlCWoQAAAJjUTC5u1Ewu" >> ~/.ssh/cicd_key
-          echo "bgAAAAtzc2gtZWQyNTUxOQAAACDT4MGu3x3l3HUTX7mYBFUQI32OR8VFw65zGj68QlCWoQ" >> ~/.ssh/cicd_key
-          echo "AAAED59OCsItR17D6d8vMxr+BtJ7u/W7/SmRKu3uh1ZiY2a9Pgwa7fHeXcdRNfuZgEVRAj" >> ~/.ssh/cicd_key
-          echo "fY5HxUXDrnMaPrxCUJahAAAAD2NpY2QtZGVwbG95bWVudAECAwQFBg==" >> ~/.ssh/cicd_key
-          echo "-----END OPENSSH PRIVATE KEY-----" >> ~/.ssh/cicd_key
+          cat > ~/.ssh/cicd_key << 'EOF'
+          -----BEGIN OPENSSH PRIVATE KEY-----
+          b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW
+          QyNTUxOQAAACDT4MGu3x3l3HUTX7mYBFUQI32OR8VFw65zGj68QlCWoQAAAJjUTC5u1Ewu
+          bgAAAAtzc2gtZWQyNTUxOQAAACDT4MGu3x3l3HUTX7mYBFUQI32OR8VFw65zGj68QlCWoQ
+          AAAED59OCsItR17D6d8vMxr+BtJ7u/W7/SmRKu3uh1ZiY2a9Pgwa7fHeXcdRNfuZgEVRAj
+          fY5HxUXDrnMaPrxCUJahAAAAD2NpY2QtZGVwbG95bWVudAECAwQFBg==
+          -----END OPENSSH PRIVATE KEY-----
+          EOF
           chmod 600 ~/.ssh/cicd_key
           ssh-keyscan 13.204.190.46 >> ~/.ssh/known_hosts 2>/dev/null
 
+      # Step 7: Prepare temporary deployment directory on bastion
       - name: Prepare Bastion Directory
         run: |
           ssh -i ~/.ssh/cicd_key -o StrictHostKeyChecking=no ec2-user@13.204.190.46 "mkdir -p /tmp/frontend-deploy && rm -rf /tmp/frontend-deploy/*"
 
+      # Step 8: Copy built frontend files to bastion server
       - name: Copy Build to Bastion
         run: |
-          rsync -avz -e 'ssh -i ~/.ssh/cicd_key -o StrictHostKeyChecking=no' dist/ ec2-user@13.204.190.46:/tmp/frontend-deploy/
+          rsync -avz -e 'ssh -i ~/.ssh/cicd_key -o StrictHostKeyChecking=no' frontend/forteai-nexus-frontend/dist/ ec2-user@13.204.190.46:/tmp/frontend-deploy/
 
+      # Step 9: Backup current frontend before deploying new version
       - name: Backup Current Frontend
         run: |
           ssh -i ~/.ssh/cicd_key -o StrictHostKeyChecking=no ec2-user@13.204.190.46 "
@@ -66,11 +81,14 @@ jobs:
             '
           "
 
+      # Step 10: Deploy new frontend files to Nginx directory
       - name: Deploy to Frontend Server
         run: |
           ssh -i ~/.ssh/cicd_key -o StrictHostKeyChecking=no ec2-user@13.204.190.46 "
             ssh -i ~/.ssh/frontend_deploy_key -o StrictHostKeyChecking=no ec2-user@10.0.143.197 'sudo rm -rf /usr/share/nginx/html/*'
+            
             rsync -avz -e 'ssh -i ~/.ssh/frontend_deploy_key -o StrictHostKeyChecking=no' /tmp/frontend-deploy/ ec2-user@10.0.143.197:/tmp/frontend-new/
+            
             ssh -i ~/.ssh/frontend_deploy_key -o StrictHostKeyChecking=no ec2-user@10.0.143.197 '
               sudo cp -r /tmp/frontend-new/* /usr/share/nginx/html/
               sudo chown -R nginx:nginx /usr/share/nginx/html
@@ -79,22 +97,75 @@ jobs:
             '
           "
 
-      - name: Restart Nginx
+      # Step 11: Verify Nginx configuration is valid
+      - name: Verify Nginx Configuration
         run: |
           ssh -i ~/.ssh/cicd_key -o StrictHostKeyChecking=no ec2-user@13.204.190.46 "
             ssh -i ~/.ssh/frontend_deploy_key -o StrictHostKeyChecking=no ec2-user@10.0.143.197 '
               sudo nginx -t
-              sudo systemctl restart nginx
-              sleep 3
-              sudo systemctl is-active nginx
+              NGINX_ROOT=\$(grep -r \"root\" /etc/nginx/conf.d/frontend.conf | awk \"{print \\\$2}\" | tr -d \";\")
+              if [ \"\$NGINX_ROOT\" = \"/usr/share/nginx/html\" ]; then
+                echo \"Nginx path correct\"
+              else
+                echo \"Warning: Nginx path is \$NGINX_ROOT\"
+              fi
             '
           "
 
+      # Step 12: Restart Nginx to serve new frontend
+      - name: Restart Nginx
+        run: |
+          ssh -i ~/.ssh/cicd_key -o StrictHostKeyChecking=no ec2-user@13.204.190.46 "
+            ssh -i ~/.ssh/frontend_deploy_key -o StrictHostKeyChecking=no ec2-user@10.0.143.197 '
+              sudo systemctl restart nginx
+              sleep 3
+              if sudo systemctl is-active --quiet nginx; then
+                echo \"Nginx running successfully\"
+              else
+                echo \"Nginx failed to start\"
+                exit 1
+              fi
+            '
+          "
+
+      # Step 13: Verify deployment was successful
       - name: Verify Deployment
         run: |
           ssh -i ~/.ssh/cicd_key -o StrictHostKeyChecking=no ec2-user@13.204.190.46 "
             ssh -i ~/.ssh/frontend_deploy_key -o StrictHostKeyChecking=no ec2-user@10.0.143.197 '
-              ls -la /usr/share/nginx/html/index.html
-              ls -la /usr/share/nginx/html/sample_import.csv
+              if [ -f /usr/share/nginx/html/index.html ]; then
+                echo \"index.html exists\"
+                FILE_DATE=\$(stat -c %y /usr/share/nginx/html/index.html | cut -d\".\" -f1)
+                echo \"Last modified: \$FILE_DATE\"
+              else
+                echo \"index.html NOT FOUND\"
+                exit 1
+              fi
+              
+              ASSET_COUNT=\$(find /usr/share/nginx/html/assets -type f 2>/dev/null | wc -l)
+              echo \"Assets: \$ASSET_COUNT files\"
+              
+              HTTP_CODE=\$(curl -s -o /dev/null -w \"%{http_code}\" http://localhost/)
+              if [ \"\$HTTP_CODE\" = \"200\" ]; then
+                echo \"Local HTTP: \$HTTP_CODE\"
+              else
+                echo \"Local HTTP failed: \$HTTP_CODE\"
+                exit 1
+              fi
+              
+              if grep -r \"nexus-backend.forteai.in\" /usr/share/nginx/html/assets/*.js >/dev/null 2>&1; then
+                echo \"Backend URL configured\"
+              else
+                echo \"Warning: Backend URL not found\"
+              fi
             '
           "
+
+      # Step 14: Display deployment summary
+      - name: Deployment Summary
+        if: always()
+        run: |
+          echo "Frontend deployment completed"
+          echo "URL: https://nexus-poc.forteai.in"
+          echo "Backend: https://nexus-backend.forteai.in/api"
+          echo "Deploy path: /usr/share/nginx/html"
