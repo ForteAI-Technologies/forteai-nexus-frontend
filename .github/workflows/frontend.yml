@@ -25,27 +25,23 @@ jobs:
       - name: Create Environment File
         run: |
           echo "VITE_API_BASE_URL=https://nexus-backend.forteai.in/api" > .env.production
-          cat .env.production
 
       - name: Build Production Bundle
         run: |
-          rm -rf node_modules dist node_modules/.vite
+          rm -rf node_modules dist
           npm install --legacy-peer-deps
           npm run build
-          ls -la dist/
 
       - name: Setup SSH Key for Bastion
         run: |
           mkdir -p ~/.ssh
-          cat > ~/.ssh/cicd_key << 'SSHKEY'
-          -----BEGIN OPENSSH PRIVATE KEY-----
-          b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW
-          QyNTUxOQAAACDT4MGu3x3l3HUTX7mYBFUQI32OR8VFw65zGj68QlCWoQAAAJjUTC5u1Ewu
-          bgAAAAtzc2gtZWQyNTUxOQAAACDT4MGu3x3l3HUTX7mYBFUqI32OR8VFw65zGj68QlCWoQ
-          AAAED59OCsItR17D6d8vMxr+BtJ7u/W7/SmRKu3uh1ZiY2a9Pgwa7fHeXcdRNfuZgEVRAj
-          fY5HxUXDrnMaPrxCUJahAAAAD2NpY2QtZGVwbG95bWVudAECAwQFBg==
-          -----END OPENSSH PRIVATE KEY-----
-          SSHKEY
+          echo "-----BEGIN OPENSSH PRIVATE KEY-----" > ~/.ssh/cicd_key
+          echo "b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW" >> ~/.ssh/cicd_key
+          echo "QyNTUxOQAAACDT4MGu3x3l3HUTX7mYBFuQI32OR8VFw65zGj68QlCWoQAAAJjUTC5u1Ewu" >> ~/.ssh/cicd_key
+          echo "bgAAAAtzc2gtZWQyNTUxOQAAACDT4MGu3x3l3HUTX7mYBFUQI32OR8VFw65zGj68QlCWoQ" >> ~/.ssh/cicd_key
+          echo "AAAED59OCsItR17D6d8vMxr+BtJ7u/W7/SmRKu3uh1ZiY2a9Pgwa7fHeXcdRNfuZgEVRAj" >> ~/.ssh/cicd_key
+          echo "fY5HxUXDrnMaPrxCUJahAAAAD2NpY2QtZGVwbG95bWVudAECAwQFBg==" >> ~/.ssh/cicd_key
+          echo "-----END OPENSSH PRIVATE KEY-----" >> ~/.ssh/cicd_key
           chmod 600 ~/.ssh/cicd_key
           ssh-keyscan 13.204.190.46 >> ~/.ssh/known_hosts 2>/dev/null
 
@@ -74,9 +70,7 @@ jobs:
         run: |
           ssh -i ~/.ssh/cicd_key -o StrictHostKeyChecking=no ec2-user@13.204.190.46 "
             ssh -i ~/.ssh/frontend_deploy_key -o StrictHostKeyChecking=no ec2-user@10.0.143.197 'sudo rm -rf /usr/share/nginx/html/*'
-            
             rsync -avz -e 'ssh -i ~/.ssh/frontend_deploy_key -o StrictHostKeyChecking=no' /tmp/frontend-deploy/ ec2-user@10.0.143.197:/tmp/frontend-new/
-            
             ssh -i ~/.ssh/frontend_deploy_key -o StrictHostKeyChecking=no ec2-user@10.0.143.197 '
               sudo cp -r /tmp/frontend-new/* /usr/share/nginx/html/
               sudo chown -R nginx:nginx /usr/share/nginx/html
@@ -85,16 +79,11 @@ jobs:
             '
           "
 
-      - name: Verify Nginx Configuration
-        run: |
-          ssh -i ~/.ssh/cicd_key -o StrictHostKeyChecking=no ec2-user@13.204.190.46 "
-            ssh -i ~/.ssh/frontend_deploy_key -o StrictHostKeyChecking=no ec2-user@10.0.143.197 'sudo nginx -t'
-          "
-
       - name: Restart Nginx
         run: |
           ssh -i ~/.ssh/cicd_key -o StrictHostKeyChecking=no ec2-user@13.204.190.46 "
             ssh -i ~/.ssh/frontend_deploy_key -o StrictHostKeyChecking=no ec2-user@10.0.143.197 '
+              sudo nginx -t
               sudo systemctl restart nginx
               sleep 3
               sudo systemctl is-active nginx
@@ -109,9 +98,3 @@ jobs:
               ls -la /usr/share/nginx/html/sample_import.csv
             '
           "
-
-      - name: Deployment Summary
-        if: always()
-        run: |
-          echo "Deployment completed"
-          echo "URL: https://nexus-poc.forteai.in"
