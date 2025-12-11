@@ -84,9 +84,9 @@ jobs:
               sudo nginx -t
               NGINX_ROOT=\$(grep -r \"root\" /etc/nginx/conf.d/frontend.conf | awk \"{print \\\$2}\" | tr -d \";\")
               if [ \"\$NGINX_ROOT\" = \"/usr/share/nginx/html\" ]; then
-                echo \"✅ Nginx path correct\"
+                echo \"Nginx path correct\"
               else
-                echo \"⚠️ Warning: Nginx path is \$NGINX_ROOT\"
+                echo \"Warning: Nginx path is \$NGINX_ROOT\"
               fi
             '
           "
@@ -98,9 +98,9 @@ jobs:
               sudo systemctl restart nginx
               sleep 3
               if sudo systemctl is-active --quiet nginx; then
-                echo \"✅ Nginx running successfully\"
+                echo \"Nginx running successfully\"
               else
-                echo \"❌ Nginx failed to start\"
+                echo \"Nginx failed to start\"
                 exit 1
               fi
             '
@@ -111,29 +111,29 @@ jobs:
           ssh -i ~/.ssh/cicd_key -o StrictHostKeyChecking=no ec2-user@${{ vars.BASTION_IP }} "
             ssh -i ~/.ssh/frontend_deploy_key -o StrictHostKeyChecking=no ec2-user@${{ vars.FRONTEND_SERVER_IP }} '
               if [ -f /usr/share/nginx/html/index.html ]; then
-                echo \"✅ index.html exists\"
+                echo \"index.html exists\"
                 FILE_DATE=\$(stat -c %y /usr/share/nginx/html/index.html | cut -d\".\" -f1)
-                echo \"📅 Last modified: \$FILE_DATE\"
+                echo \"Last modified: \$FILE_DATE\"
               else
-                echo \"❌ index.html NOT FOUND\"
+                echo \"index.html NOT FOUND\"
                 exit 1
               fi
               
               ASSET_COUNT=\$(find /usr/share/nginx/html/assets -type f 2>/dev/null | wc -l)
-              echo \"📦 Assets: \$ASSET_COUNT files\"
-              
+              echo \"Assets: \$ASSET_COUNT files\"
+
               HTTP_CODE=\$(curl -s -o /dev/null -w \"%{http_code}\" http://localhost/)
               if [ \"\$HTTP_CODE\" = \"200\" ]; then
-                echo \"✅ Local HTTP: \$HTTP_CODE\"
+                echo \"Local HTTP: \$HTTP_CODE\"
               else
-                echo \"❌ Local HTTP failed: \$HTTP_CODE\"
+                echo \"Local HTTP failed: \$HTTP_CODE\"
                 exit 1
               fi
-              
-              if grep -r \"nexus-backend.forteai.in\" /usr/share/nginx/html/assets/*.js >/dev/null 2>&1; then
-                echo \"✅ Backend URL configured\"
+
+              if grep -r \"${{ vars.BACKEND_API_URL }}\" /usr/share/nginx/html/assets/*.js >/dev/null 2>&1; then
+                echo \"Backend URL configured\"
               else
-                echo \"⚠️ Warning: Backend URL not found\"
+                echo \"Warning: Backend URL not found\"
               fi
             '
           "
@@ -141,12 +141,7 @@ jobs:
       - name: Deployment Summary
         if: always()
         run: |
-          echo "=============================================="
-          echo "🎉 Frontend Deployment Completed"
-          echo "=============================================="
-          echo "📍 Frontend URL: ${{ vars.FRONTEND_DOMAIN }}"
-          echo "🔗 Backend API: ${{ vars.BACKEND_API_URL }}"
-          echo "📂 Deploy path: /usr/share/nginx/html"
-          echo "🖥️ Server IP: ${{ vars.FRONTEND_SERVER_IP }}"
-          echo "🚀 Status: ${{ job.status }}"
-          echo "=============================================="
+          echo "Frontend deployment completed"
+          echo "URL: ${{ vars.FRONTEND_DOMAIN }}"
+          echo "Backend: ${{ vars.BACKEND_API_URL }}"
+          echo "Deploy path: /usr/share/nginx/html"
