@@ -24,7 +24,7 @@ jobs:
 
       - name: Create Environment File
         run: |
-          echo "VITE_API_BASE_URL=https://nexus-backend.forteai.in/api" > .env.production
+          echo "VITE_API_BASE_URL=${{ vars.BACKEND_API_URL }}" > .env.production
           cat .env.production
 
       - name: Build Production Bundle
@@ -37,22 +37,22 @@ jobs:
       - name: Setup SSH Key for Bastion
         run: |
           mkdir -p ~/.ssh
-          echo "LS0tLS1CRUdJTiBPUEVOU1NIIFBSSVZBVEUgS0VZLS0tLS0KYjNCbGJuTnphQzFyWlhrdGRqRUFBQUFBQkc1dmJtVUFBQUFFYm05dVpRQUFBQUFBQUFBQkFBQUFNd0FBQUF0emMyZ3RaVwpReU5UVXhPUUFBQUNEVDRNR3UzeDNsM0hVVFg3bVlCRlVRSTMyT1I4VkZ3NjV6R2o2OFFsQ1dvUUFBQUpqVVRDNXUxRXd1CmJnQUFBQXR6YzJndFpXUXlOVFV4T1FBQUFDRFQ0TUd1M3gzbDNIVVRYN21ZQkZVUUkzMk9SOFZGdzY1ekdqNjhRbENXb1EKQUFBRUQ1OU9Dc0l0UjE3RDZkOHZNeHIrQnRKN3UvVzcvU21SS3UzdWgxWmlZMmE5UGd3YTdmSGVYY2RSTmZ1WmdFVlJBagpmWTVIeFVYRHJuTWFQcnhDVUphaEFBQUFEMk5wWTJRdFpHVndiRzk1YldWdWRBRUNBd1FGQmc9PQotLS0tLUVORCBPUEVOU1NIIFBSSVZBVEUgS0VZLS0tLS0K" | base64 -d > ~/.ssh/cicd_key
+          echo "${{ secrets.BASTION_SSH_KEY }}" > ~/.ssh/cicd_key
           chmod 600 ~/.ssh/cicd_key
-          ssh-keyscan 13.204.190.46 >> ~/.ssh/known_hosts 2>/dev/null
+          ssh-keyscan ${{ vars.BASTION_IP }} >> ~/.ssh/known_hosts 2>/dev/null
 
       - name: Prepare Bastion Directory
         run: |
-          ssh -i ~/.ssh/cicd_key -o StrictHostKeyChecking=no ec2-user@13.204.190.46 "mkdir -p /tmp/frontend-deploy && rm -rf /tmp/frontend-deploy/*"
+          ssh -i ~/.ssh/cicd_key -o StrictHostKeyChecking=no ec2-user@${{ vars.BASTION_IP }} "mkdir -p /tmp/frontend-deploy && rm -rf /tmp/frontend-deploy/*"
 
       - name: Copy Build to Bastion
         run: |
-          rsync -avz -e 'ssh -i ~/.ssh/cicd_key -o StrictHostKeyChecking=no' dist/ ec2-user@13.204.190.46:/tmp/frontend-deploy/
+          rsync -avz -e 'ssh -i ~/.ssh/cicd_key -o StrictHostKeyChecking=no' dist/ ec2-user@${{ vars.BASTION_IP }}:/tmp/frontend-deploy/
 
       - name: Backup Current Frontend
         run: |
-          ssh -i ~/.ssh/cicd_key -o StrictHostKeyChecking=no ec2-user@13.204.190.46 "
-            ssh -i ~/.ssh/frontend_deploy_key -o StrictHostKeyChecking=no ec2-user@10.0.143.197 '
+          ssh -i ~/.ssh/cicd_key -o StrictHostKeyChecking=no ec2-user@${{ vars.BASTION_IP }} "
+            ssh -i ~/.ssh/frontend_deploy_key -o StrictHostKeyChecking=no ec2-user@${{ vars.FRONTEND_SERVER_IP }} '
               if [ -d /usr/share/nginx/html ] && [ -n \"\$(ls -A /usr/share/nginx/html 2>/dev/null)\" ]; then
                 BACKUP_DIR=\"/home/ec2-user/frontend-backups/backup-\$(date +%Y%m%d_%H%M%S)\"
                 mkdir -p \"\$BACKUP_DIR\"
@@ -64,12 +64,12 @@ jobs:
 
       - name: Deploy to Frontend Server
         run: |
-          ssh -i ~/.ssh/cicd_key -o StrictHostKeyChecking=no ec2-user@13.204.190.46 "
-            ssh -i ~/.ssh/frontend_deploy_key -o StrictHostKeyChecking=no ec2-user@10.0.143.197 'sudo rm -rf /usr/share/nginx/html/*'
+          ssh -i ~/.ssh/cicd_key -o StrictHostKeyChecking=no ec2-user@${{ vars.BASTION_IP }} "
+            ssh -i ~/.ssh/frontend_deploy_key -o StrictHostKeyChecking=no ec2-user@${{ vars.FRONTEND_SERVER_IP }} 'sudo rm -rf /usr/share/nginx/html/*'
             
-            rsync -avz -e 'ssh -i ~/.ssh/frontend_deploy_key -o StrictHostKeyChecking=no' /tmp/frontend-deploy/ ec2-user@10.0.143.197:/tmp/frontend-new/
+            rsync -avz -e 'ssh -i ~/.ssh/frontend_deploy_key -o StrictHostKeyChecking=no' /tmp/frontend-deploy/ ec2-user@${{ vars.FRONTEND_SERVER_IP }}:/tmp/frontend-new/
             
-            ssh -i ~/.ssh/frontend_deploy_key -o StrictHostKeyChecking=no ec2-user@10.0.143.197 '
+            ssh -i ~/.ssh/frontend_deploy_key -o StrictHostKeyChecking=no ec2-user@${{ vars.FRONTEND_SERVER_IP }} '
               sudo cp -r /tmp/frontend-new/* /usr/share/nginx/html/
               sudo chown -R nginx:nginx /usr/share/nginx/html
               sudo chmod -R 755 /usr/share/nginx/html
@@ -79,28 +79,28 @@ jobs:
 
       - name: Verify Nginx Configuration
         run: |
-          ssh -i ~/.ssh/cicd_key -o StrictHostKeyChecking=no ec2-user@13.204.190.46 "
-            ssh -i ~/.ssh/frontend_deploy_key -o StrictHostKeyChecking=no ec2-user@10.0.143.197 '
+          ssh -i ~/.ssh/cicd_key -o StrictHostKeyChecking=no ec2-user@${{ vars.BASTION_IP }} "
+            ssh -i ~/.ssh/frontend_deploy_key -o StrictHostKeyChecking=no ec2-user@${{ vars.FRONTEND_SERVER_IP }} '
               sudo nginx -t
               NGINX_ROOT=\$(grep -r \"root\" /etc/nginx/conf.d/frontend.conf | awk \"{print \\\$2}\" | tr -d \";\")
               if [ \"\$NGINX_ROOT\" = \"/usr/share/nginx/html\" ]; then
-                echo \"Nginx path correct\"
+                echo \"✅ Nginx path correct\"
               else
-                echo \"Warning: Nginx path is \$NGINX_ROOT\"
+                echo \"⚠️ Warning: Nginx path is \$NGINX_ROOT\"
               fi
             '
           "
 
       - name: Restart Nginx
         run: |
-          ssh -i ~/.ssh/cicd_key -o StrictHostKeyChecking=no ec2-user@13.204.190.46 "
-            ssh -i ~/.ssh/frontend_deploy_key -o StrictHostKeyChecking=no ec2-user@10.0.143.197 '
+          ssh -i ~/.ssh/cicd_key -o StrictHostKeyChecking=no ec2-user@${{ vars.BASTION_IP }} "
+            ssh -i ~/.ssh/frontend_deploy_key -o StrictHostKeyChecking=no ec2-user@${{ vars.FRONTEND_SERVER_IP }} '
               sudo systemctl restart nginx
               sleep 3
               if sudo systemctl is-active --quiet nginx; then
-                echo \"Nginx running successfully\"
+                echo \"✅ Nginx running successfully\"
               else
-                echo \"Nginx failed to start\"
+                echo \"❌ Nginx failed to start\"
                 exit 1
               fi
             '
@@ -108,32 +108,32 @@ jobs:
 
       - name: Verify Deployment
         run: |
-          ssh -i ~/.ssh/cicd_key -o StrictHostKeyChecking=no ec2-user@13.204.190.46 "
-            ssh -i ~/.ssh/frontend_deploy_key -o StrictHostKeyChecking=no ec2-user@10.0.143.197 '
+          ssh -i ~/.ssh/cicd_key -o StrictHostKeyChecking=no ec2-user@${{ vars.BASTION_IP }} "
+            ssh -i ~/.ssh/frontend_deploy_key -o StrictHostKeyChecking=no ec2-user@${{ vars.FRONTEND_SERVER_IP }} '
               if [ -f /usr/share/nginx/html/index.html ]; then
-                echo \"index.html exists\"
+                echo \"✅ index.html exists\"
                 FILE_DATE=\$(stat -c %y /usr/share/nginx/html/index.html | cut -d\".\" -f1)
-                echo \"Last modified: \$FILE_DATE\"
+                echo \"📅 Last modified: \$FILE_DATE\"
               else
-                echo \"index.html NOT FOUND\"
+                echo \"❌ index.html NOT FOUND\"
                 exit 1
               fi
               
               ASSET_COUNT=\$(find /usr/share/nginx/html/assets -type f 2>/dev/null | wc -l)
-              echo \"Assets: \$ASSET_COUNT files\"
+              echo \"📦 Assets: \$ASSET_COUNT files\"
               
               HTTP_CODE=\$(curl -s -o /dev/null -w \"%{http_code}\" http://localhost/)
               if [ \"\$HTTP_CODE\" = \"200\" ]; then
-                echo \"Local HTTP: \$HTTP_CODE\"
+                echo \"✅ Local HTTP: \$HTTP_CODE\"
               else
-                echo \"Local HTTP failed: \$HTTP_CODE\"
+                echo \"❌ Local HTTP failed: \$HTTP_CODE\"
                 exit 1
               fi
               
               if grep -r \"nexus-backend.forteai.in\" /usr/share/nginx/html/assets/*.js >/dev/null 2>&1; then
-                echo \"Backend URL configured\"
+                echo \"✅ Backend URL configured\"
               else
-                echo \"Warning: Backend URL not found\"
+                echo \"⚠️ Warning: Backend URL not found\"
               fi
             '
           "
@@ -141,7 +141,12 @@ jobs:
       - name: Deployment Summary
         if: always()
         run: |
-          echo "Frontend deployment completed"
-          echo "URL: https://nexus-poc.forteai.in"
-          echo "Backend: https://nexus-backend.forteai.in/api"
-          echo "Deploy path: /usr/share/nginx/html"
+          echo "=============================================="
+          echo "🎉 Frontend Deployment Completed"
+          echo "=============================================="
+          echo "📍 Frontend URL: ${{ vars.FRONTEND_DOMAIN }}"
+          echo "🔗 Backend API: ${{ vars.BACKEND_API_URL }}"
+          echo "📂 Deploy path: /usr/share/nginx/html"
+          echo "🖥️ Server IP: ${{ vars.FRONTEND_SERVER_IP }}"
+          echo "🚀 Status: ${{ job.status }}"
+          echo "=============================================="
